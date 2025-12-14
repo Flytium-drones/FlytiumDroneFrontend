@@ -3,6 +3,7 @@ import { ArrowRight, ArrowLeft } from "lucide-react";
 import axios from "axios";
 import { API_URL } from "../../../api";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 const ProductAdCard = () => {
   const [ads, setAds] = useState([]);
@@ -58,26 +59,54 @@ const ProductAdCard = () => {
   return (
     <section className="py-20 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
         {/* Header with navigation */}
-        <div className="mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="mb-16"
+        >
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
             <div className="relative">
               {/* Large number background */}
-              <div className="absolute -left-4 -top-8 text-[180px] font-black text-gray-100 leading-none select-none pointer-events-none z-0">
-                {String(currentAdIndex + 1).padStart(2, '0')}
-              </div>
-              
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="absolute -left-4 -top-8 text-[180px] font-black text-gray-100 leading-none select-none pointer-events-none z-0"
+              >
+                {String(currentAdIndex + 1).padStart(2, "0")}
+              </motion.div>
+
               <div className="relative z-20">
-                <div className="inline-flex items-center gap-3 mb-4">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  className="inline-flex items-center gap-3 mb-4"
+                >
                   <div className="h-px w-12 bg-gray-900"></div>
                   <span className="text-sm font-medium tracking-[0.2em] uppercase text-gray-600">
                     {currentAd.badge || "Featured"}
                   </span>
-                </div>
-                <h2 className="text-6xl lg:text-7xl font-black text-gray-900 tracking-tight">
+                </motion.div>
+                <motion.h2
+                  initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    duration: 0.6,
+                    delay: 0.4,
+                    type: "spring",
+                    stiffness: 100,
+                  }}
+                  className="text-6xl lg:text-7xl font-black text-gray-900 tracking-tight"
+                >
                   Offers
-                </h2>
+                </motion.h2>
               </div>
             </div>
 
@@ -86,11 +115,17 @@ const ProductAdCard = () => {
               <div className="flex items-center gap-6 relative z-50 pointer-events-auto">
                 <div className="text-right pointer-events-none">
                   <div className="text-4xl font-bold text-gray-900">
-                    {String(currentAdIndex + 1).padStart(2, '0')}
+                    {String(currentAdIndex + 1).padStart(2, "0")}
                   </div>
-                  <div className="text-sm text-gray-400">
-                    / {String(ads.length).padStart(2, '0')}
-                  </div>
+                  <motion.div
+                    className="text-sm text-gray-400"
+                    initial={{ opacity: 0, y: 6 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.15, ease: "easeIn" }}
+                  >
+                    / {String(ads.length).padStart(2, "0")}
+                  </motion.div>
                 </div>
                 <div className="flex gap-2 pointer-events-auto">
                   <button
@@ -115,7 +150,7 @@ const ProductAdCard = () => {
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
 
         {/* Main Content */}
         <div className="relative">
@@ -124,12 +159,11 @@ const ProductAdCard = () => {
               key={ad._id || index}
               className={`transition-all duration-700 ${
                 index === currentAdIndex
-                  ? 'opacity-100 relative'
-                  : 'opacity-0 absolute inset-0 pointer-events-none'
+                  ? "opacity-100 relative"
+                  : "opacity-0 absolute inset-0 pointer-events-none"
               }`}
             >
               <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-                
                 {/* Content Side */}
                 <div className="lg:col-span-5 space-y-8">
                   {/* Title with accent line */}
@@ -157,7 +191,9 @@ const ProductAdCard = () => {
                           <div className="flex-shrink-0 mt-2">
                             <div className="w-6 h-px bg-gray-900 group-hover:w-12 transition-all duration-300"></div>
                           </div>
-                          <span className="text-gray-700 font-medium">{feature}</span>
+                          <span className="text-gray-700 font-medium">
+                            {feature}
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -190,7 +226,7 @@ const ProductAdCard = () => {
                     {/* Decorative corner elements */}
                     <div className="absolute -top-4 -left-4 w-12 h-12 border-l-2 border-t-2 border-gray-900 z-10"></div>
                     <div className="absolute -bottom-4 -right-4 w-12 h-12 border-r-2 border-b-2 border-gray-900 z-10"></div>
-                    
+
                     <div className="aspect-[4/3] overflow-hidden bg-gray-100 relative">
                       <img
                         src={ad.image}
@@ -198,13 +234,12 @@ const ProductAdCard = () => {
                         className="w-full h-full object-contain p-8 transition-transform duration-700 group-hover:scale-105"
                         loading="lazy"
                       />
-                      
+
                       {/* Gradient overlay on hover */}
                       <div className="absolute inset-0 bg-gradient-to-t from-gray-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
                   </div>
                 </div>
-
               </div>
             </div>
           ))}
@@ -226,12 +261,12 @@ const ProductAdCard = () => {
                   disabled={isTransitioning}
                   className="text-sm font-bold text-gray-400 hover:text-gray-900 transition-colors disabled:cursor-not-allowed"
                 >
-                  {String(index + 1).padStart(2, '0')}
+                  {String(index + 1).padStart(2, "0")}
                 </button>
                 <div className="flex-1 h-px bg-gray-200 relative overflow-hidden">
-                  <div 
+                  <div
                     className={`absolute inset-y-0 left-0 bg-gray-900 transition-all duration-1000 ${
-                      index === currentAdIndex ? 'w-full' : 'w-0'
+                      index === currentAdIndex ? "w-full" : "w-0"
                     }`}
                   />
                 </div>
@@ -242,7 +277,6 @@ const ProductAdCard = () => {
             ))}
           </div>
         )}
-
       </div>
     </section>
   );

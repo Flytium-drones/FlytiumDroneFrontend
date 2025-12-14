@@ -43,6 +43,8 @@ import ManageEmployees from "./pages/Admin/ManageEmployees";
 import ManageJobs from "./pages/Admin/ManageJobs";
 import JobApplications from "./pages/Admin/JobApplications";
 import ManageContacts from "./pages/Admin/ManageContacts";
+import { LenisProvider } from "./components/LenisProvider";
+import ScrollToTop from "./components/ScrollToTop";
 
 const AppContent = () => {
   const location = useLocation();
@@ -56,7 +58,7 @@ const AppContent = () => {
         <Route path="/login-success" element={<Successful />} />
         <Route path="/signup" element={<Account />} />
         <Route path="/register-success" element={<Successful2 />} />
-        <Route path="/store" element={<Store />} />
+        {/* <Route path="/store" element={<Store />} /> */}
         <Route path="/checkout" element={<NewCheckoutPage />} />
         <Route path="/checkout-old" element={<CheckoutPage />} />
         <Route path="/about" element={<About />} />
@@ -100,10 +102,13 @@ function App() {
   return (
     <>
       <Toaster position="top-right" reverseOrder={false} />
-      <Router>
-        <Navbar />
-        <AppContent />
-      </Router>
+      <LenisProvider>
+        <Router>
+          <Navbar />
+          <AppContent />
+          <ScrollToTop />
+        </Router>
+      </LenisProvider>
     </>
   );
 }

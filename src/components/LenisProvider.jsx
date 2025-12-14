@@ -1,14 +1,12 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
-import Lenis from 'lenis';
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+import Lenis from "lenis";
 
 const LenisContext = createContext(null);
 
 export const useLenis = () => {
-  const context = useContext(LenisContext);
-  if (!context) {
-    throw new Error('useLenis must be used within a LenisProvider');
-  }
-  return context;
+  // Return the Lenis context directly. It may be null during initial mount
+  // while the Lenis instance is being initialized inside the provider.
+  return useContext(LenisContext);
 };
 
 export const LenisProvider = ({ children }) => {
@@ -20,8 +18,8 @@ export const LenisProvider = ({ children }) => {
     const lenisInstance = new Lenis({
       duration: 1.2, // Smooth scroll duration
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Custom easing function
-      direction: 'vertical', // Scroll direction
-      gestureDirection: 'vertical', // Gesture direction
+      direction: "vertical", // Scroll direction
+      gestureDirection: "vertical", // Gesture direction
       smooth: true, // Enable smooth scrolling
       mouseMultiplier: 1, // Mouse scroll multiplier
       smoothTouch: false, // Disable smooth scrolling on touch devices
@@ -49,9 +47,7 @@ export const LenisProvider = ({ children }) => {
   }, []);
 
   return (
-    <LenisContext.Provider value={lenis}>
-      {children}
-    </LenisContext.Provider>
+    <LenisContext.Provider value={lenis}>{children}</LenisContext.Provider>
   );
 };
 
@@ -63,12 +59,12 @@ export const useScrollAnimation = (callback, dependencies = []) => {
     if (!lenis) return;
 
     // Add scroll listener
-    lenis.on('scroll', callback);
+    lenis.on("scroll", callback);
 
     // Cleanup
     return () => {
-      if (lenis && typeof lenis.off === 'function') {
-        lenis.off('scroll', callback);
+      if (lenis && typeof lenis.off === "function") {
+        lenis.off("scroll", callback);
       }
     };
   }, [lenis, callback, ...dependencies]);
@@ -80,12 +76,12 @@ export const useScrollTo = () => {
 
   const scrollTo = (target, options = {}) => {
     if (!lenis) return;
-    
+
     const defaultOptions = {
       offset: 0,
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      ...options
+      ...options,
     };
 
     lenis.scrollTo(target, defaultOptions);
@@ -106,12 +102,12 @@ export const useSafeScrollAnimation = (callback, dependencies = []) => {
     if (!lenisContext) return;
 
     // Add scroll listener
-    lenisContext.on('scroll', callback);
+    lenisContext.on("scroll", callback);
 
     // Cleanup
     return () => {
-      if (lenisContext && typeof lenisContext.off === 'function') {
-        lenisContext.off('scroll', callback);
+      if (lenisContext && typeof lenisContext.off === "function") {
+        lenisContext.off("scroll", callback);
       }
     };
   }, [lenisContext, callback, ...dependencies]);

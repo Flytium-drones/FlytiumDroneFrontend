@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { Play, Pause, Volume2, VolumeX, ArrowRight } from "lucide-react";
 import Container from "../../ui/Container";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const VideoCard = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
 
   const handlePlayPause = () => {
-    const video = document.getElementById('drone-video');
+    const video = document.getElementById("drone-video");
     if (isPlaying) {
       video.pause();
     } else {
@@ -18,7 +19,7 @@ const VideoCard = () => {
   };
 
   const handleMuteToggle = () => {
-    const video = document.getElementById('drone-video');
+    const video = document.getElementById("drone-video");
     video.muted = !isMuted;
     setIsMuted(!isMuted);
   };
@@ -27,38 +28,69 @@ const VideoCard = () => {
     "Precision Control",
     "4K Recording",
     "Live Streaming",
-    "Extended Flight"
+    "Extended Flight",
   ];
 
   return (
     <section className="py-20 bg-gray-50 relative overflow-hidden">
       <Container>
-        
         {/* Header */}
-        <div className="mb-16">
-          <div className="inline-flex items-center gap-3 mb-4">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="mb-16"
+        >
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="inline-flex items-center gap-3 mb-4"
+          >
             <div className="h-px w-12 bg-gray-900"></div>
             <span className="text-sm font-medium tracking-[0.2em] uppercase text-gray-600">
               In Action
             </span>
-          </div>
-          <h2 className="text-6xl lg:text-7xl font-black text-gray-900 tracking-tight mb-6">
-            See It <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600">Live</span>
-          </h2>
-          <p className="text-lg text-gray-600 max-w-2xl font-light">
-            Experience the precision, power, and beauty of our drone technology in real-world applications
-          </p>
-        </div>
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{
+              duration: 0.6,
+              delay: 0.3,
+              type: "spring",
+              stiffness: 100,
+            }}
+            className="text-6xl lg:text-7xl font-black text-gray-900 tracking-tight mb-6"
+          >
+            See It{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600">
+              Live
+            </span>
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4, type: "spring" }}
+            className="text-lg text-gray-600 max-w-2xl font-light"
+          >
+            Experience the precision, power, and beauty of our drone technology
+            in real-world applications
+          </motion.p>
+        </motion.div>
 
         {/* Main Content */}
         <div className="grid lg:grid-cols-12 gap-12 items-center">
-          
           {/* Video Side - Larger */}
           <div className="lg:col-span-8 relative">
             {/* Decorative corners */}
             <div className="absolute -top-4 -left-4 w-16 h-16 border-l-2 border-t-2 border-gray-900 z-10"></div>
             <div className="absolute -bottom-4 -right-4 w-16 h-16 border-r-2 border-b-2 border-gray-900 z-10"></div>
-            
+
             <div className="relative aspect-video bg-gray-900 overflow-hidden group">
               <video
                 id="drone-video"
@@ -95,9 +127,13 @@ const VideoCard = () => {
                     onClick={handleMuteToggle}
                     className="w-12 h-12 border border-white/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white hover:text-gray-900 transition-all duration-300"
                   >
-                    {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+                    {isMuted ? (
+                      <VolumeX className="w-5 h-5" />
+                    ) : (
+                      <Volume2 className="w-5 h-5" />
+                    )}
                   </button>
-                  
+
                   <div className="text-white text-sm font-medium tracking-wider backdrop-blur-sm bg-black/30 px-4 py-2">
                     LIVE DEMO
                   </div>
@@ -108,7 +144,6 @@ const VideoCard = () => {
 
           {/* Content Side - Smaller */}
           <div className="lg:col-span-4 space-y-8">
-            
             {/* Title with accent */}
             <div>
               <div className="flex items-start gap-4 mb-6">
@@ -120,7 +155,8 @@ const VideoCard = () => {
             </div>
 
             <p className="text-gray-600 leading-relaxed font-light">
-              From smooth aerial cinematography to precision industrial applications, see how our technology transforms possibilities.
+              From smooth aerial cinematography to precision industrial
+              applications, see how our technology transforms possibilities.
             </p>
 
             {/* Features with line bullets */}
@@ -136,7 +172,7 @@ const VideoCard = () => {
             </div>
 
             {/* CTA Button */}
-            <div className="pt-4">
+            {/* <div className="pt-4">
             <Link to="/store">
               <button className="group relative px-8 py-4 bg-gray-900 text-white font-bold tracking-wider uppercase text-sm overflow-hidden">
                 <span className="relative z-10 flex items-center gap-3">
@@ -146,9 +182,8 @@ const VideoCard = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500"></div>
               </button>
             </Link>
-            </div>
+            </div> */}
           </div>
-
         </div>
       </Container>
     </section>

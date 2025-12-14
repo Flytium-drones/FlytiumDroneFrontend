@@ -3,6 +3,7 @@ import { ArrowRight, ArrowLeft } from "lucide-react";
 import Container from "../../ui/Container";
 import axios from "axios";
 import { API_URL } from "../../../api";
+import { motion, AnimatePresence } from "framer-motion";
 
 const GalleryCard = () => {
   const [experiences, setExperiences] = useState([]);
@@ -129,24 +130,48 @@ const GalleryCard = () => {
 
       <Container>
         {/* Section Header */}
-        <div className="mb-20 relative">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="mb-20 relative"
+        >
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
             <div className="relative z-10">
               {/* Large number background */}
-              <div className="absolute -left-4 -top-8 text-[180px] font-black text-gray-100 leading-none select-none pointer-events-none z-0">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="absolute -left-4 -top-8 text-[180px] font-black text-gray-100 leading-none select-none pointer-events-none z-0"
+              >
                 {String(currentIndex + 1).padStart(2, "0")}
-              </div>
+              </motion.div>
 
               <div className="relative z-20">
-                <div className="inline-flex items-center gap-3 mb-4">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  className="inline-flex items-center gap-3 mb-4"
+                >
                   <div className="h-px w-12 bg-gray-900"></div>
                   <span className="text-sm font-medium tracking-[0.2em] uppercase text-gray-600">
                     Featured
                   </span>
-                </div>
-                <h2 className="text-6xl lg:text-7xl font-black text-gray-900 tracking-tight">
+                </motion.div>
+                <motion.h2
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  className="text-6xl lg:text-7xl font-black text-gray-900 tracking-tight"
+                >
                   Experiences
-                </h2>
+                </motion.h2>
               </div>
             </div>
 
@@ -192,13 +217,19 @@ const GalleryCard = () => {
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
 
         {/* Main Content */}
         <div className="relative">
           {experiences.map((experience, index) => (
-            <div
+            <motion.div
               key={experience.id}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{
+                opacity: index === currentIndex ? 1 : 0,
+                scale: index === currentIndex ? 1 : 0.95,
+              }}
+              transition={{ duration: 0.7, ease: "easeOut" }}
               className={`transition-all duration-700 ${
                 index === currentIndex
                   ? "opacity-100 relative"
@@ -207,15 +238,37 @@ const GalleryCard = () => {
             >
               <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
                 {/* Image Side - Takes more space */}
-                <div className="lg:col-span-7 relative group">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9, x: -50 }}
+                  whileInView={{ opacity: 1, scale: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, type: "spring", stiffness: 80 }}
+                  className="lg:col-span-7 relative group"
+                >
                   {/* Image container with creative border */}
                   <div className="relative">
                     {/* Decorative corner elements */}
-                    <div className="absolute -top-4 -left-4 w-12 h-12 border-l-2 border-t-2 border-gray-900 z-10"></div>
-                    <div className="absolute -bottom-4 -right-4 w-12 h-12 border-r-2 border-b-2 border-gray-900 z-10"></div>
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: 0.2 }}
+                      className="absolute -top-4 -left-4 w-12 h-12 border-l-2 border-t-2 border-gray-900 z-10"
+                    ></motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: 0.3 }}
+                      className="absolute -bottom-4 -right-4 w-12 h-12 border-r-2 border-b-2 border-gray-900 z-10"
+                    ></motion.div>
 
                     <div className="aspect-[4/3] overflow-hidden bg-gray-100 relative flex items-center justify-center">
-                      <img
+                      <motion.img
+                        initial={{ opacity: 0, scale: 1.2 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
                         src={experience.src}
                         alt={experience.title}
                         className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
@@ -228,68 +281,123 @@ const GalleryCard = () => {
 
                     {/* Floating category badge */}
                     {experience.category && (
-                      <div className="absolute top-6 left-6 bg-white px-4 py-2 shadow-lg">
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.8, y: -20 }}
+                        whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{
+                          duration: 0.6,
+                          delay: 0.4,
+                          type: "spring",
+                        }}
+                        className="absolute top-6 left-6 bg-white px-4 py-2 shadow-lg"
+                      >
                         <span className="text-xs font-bold tracking-[0.2em] uppercase text-gray-900">
                           {experience.category}
                         </span>
-                      </div>
+                      </motion.div>
                     )}
                   </div>
 
                   {/* Stats bar below image */}
                   {experience.stats && (
-                    <div className="mt-6 grid grid-cols-3 gap-4 border-l-4 border-gray-900 pl-6">
+                    <motion.div
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.5 }}
+                      className="mt-6 grid grid-cols-3 gap-4 border-l-4 border-gray-900 pl-6"
+                    >
                       {experience.stats.participants && (
-                        <div>
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.5, delay: 0.6 }}
+                        >
                           <div className="text-3xl font-black text-gray-900">
                             {experience.stats.participants}
                           </div>
                           <div className="text-xs font-medium tracking-wider uppercase text-gray-500 mt-1">
                             Participants
                           </div>
-                        </div>
+                        </motion.div>
                       )}
                       {experience.stats.rating && (
-                        <div>
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.5, delay: 0.7 }}
+                        >
                           <div className="text-3xl font-black text-gray-900">
                             {experience.stats.rating}
                           </div>
                           <div className="text-xs font-medium tracking-wider uppercase text-gray-500 mt-1">
                             Rating
                           </div>
-                        </div>
+                        </motion.div>
                       )}
                       {experience.stats.duration && (
-                        <div>
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.5, delay: 0.8 }}
+                        >
                           <div className="text-3xl font-black text-gray-900">
                             {experience.stats.duration}
                           </div>
                           <div className="text-xs font-medium tracking-wider uppercase text-gray-500 mt-1">
                             Duration
                           </div>
-                        </div>
+                        </motion.div>
                       )}
-                    </div>
+                    </motion.div>
                   )}
-                </div>
+                </motion.div>
 
                 {/* Content Side */}
-                <div className="lg:col-span-5 space-y-8 lg:pt-8">
+                <motion.div
+                  initial={{ opacity: 0, x: 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                  className="lg:col-span-5 space-y-8 lg:pt-8"
+                >
                   {/* Title with creative line */}
                   <div>
                     <div className="flex items-start gap-4 mb-6">
-                      <div className="flex-shrink-0 w-1 h-24 bg-gradient-to-b from-emerald-500 via-blue-500 to-purple-500"></div>
-                      <h3 className="text-4xl lg:text-5xl font-black text-gray-900 leading-[0.95] tracking-tight">
+                      <motion.div
+                        initial={{ height: 0 }}
+                        whileInView={{ height: 96 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: 0.4 }}
+                        className="flex-shrink-0 w-1 bg-gradient-to-b from-emerald-500 via-blue-500 to-purple-500"
+                      ></motion.div>
+                      <motion.h3
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.5 }}
+                        className="text-4xl lg:text-5xl font-black text-gray-900 leading-[0.95] tracking-tight"
+                      >
                         {experience.title}
-                      </h3>
+                      </motion.h3>
                     </div>
                   </div>
 
                   {/* Description */}
                   {experience.description && (
-                    <p className="text-lg text-gray-600 leading-relaxed font-light">
+                    <motion.p
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.6 }}
+                      className="text-lg text-gray-600 leading-relaxed font-light"
+                    >
                       {experience.description}
-                    </p>
+                    </motion.p>
                   )}
 
                   {/* Features with creative bullets */}
@@ -324,9 +432,9 @@ const GalleryCard = () => {
                       </button>
                     </div>
                   )}
-                </div>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 

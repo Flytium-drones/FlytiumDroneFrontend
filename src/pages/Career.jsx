@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { Briefcase, MapPin, Clock, Calendar, User, Mail, Phone, Send, X } from "lucide-react";
+import {
+  Briefcase,
+  MapPin,
+  Clock,
+  Calendar,
+  User,
+  Mail,
+  Phone,
+  Send,
+  X,
+} from "lucide-react";
 import axios from "axios";
 import { API_URL } from "../api";
 import Layout from "../components/Layout/Layout";
 import EmployeeCard from "../components/EmployeeCard";
 import Spinner from "../components/Spinner";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 const Career = () => {
   const [employees, setEmployees] = useState([]);
@@ -145,17 +156,34 @@ const Career = () => {
   return (
     <Layout>
       <div className="min-h-screen bg-white">
-        
         {/* Hero */}
         <section className="pt-8 pb-8 border-b-2 border-gray-900">
           <div className="max-w-7xl mx-auto px-6">
-            <div className="w-20 h-1 bg-gradient-to-r from-emerald-600 to-blue-600 mb-4"></div>
-            <h1 className="text-6xl lg:text-7xl font-black text-gray-900 leading-tight mb-6">
+            <motion.div
+              initial={{ opacity: 0, width: 0 }}
+              animate={{ opacity: 1, width: "auto" }}
+              transition={{ duration: 0.8 }}
+              className="w-20 h-1 bg-gradient-to-r from-emerald-600 to-blue-600 mb-4"
+            ></motion.div>
+            <motion.h1
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="text-6xl lg:text-7xl font-black text-gray-900 leading-tight mb-6"
+            >
               Join the Team
-            </h1>
-            <p className="text-xl text-gray-600 max-w-2xl">
-              Build the future of drone technology with us. Explore opportunities and meet the people behind FlightDrone.
-            </p>
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-xl text-gray-600 max-w-2xl"
+            >
+              Build the future of drone technology with us. Explore
+              opportunities and meet the people behind FlightDrone.
+            </motion.p>
           </div>
         </section>
 
@@ -163,12 +191,28 @@ const Career = () => {
         <section className="py-16 border-b-2 border-gray-900">
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex items-center justify-between mb-12">
-              <h2 className="text-4xl font-black text-gray-900">Open Positions</h2>
+              <motion.h2
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7 }}
+                className="text-4xl font-black text-gray-900"
+              >
+                Open Positions
+              </motion.h2>
               {jobs.length > 0 && (
-                <div className="flex items-center gap-2 border-2 border-gray-900 px-4 py-2">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                  className="flex items-center gap-2 border-2 border-gray-900 px-4 py-2"
+                >
                   <Briefcase className="w-5 h-5" />
-                  <span className="font-bold">{jobs.length} {jobs.length === 1 ? 'Opening' : 'Openings'}</span>
-                </div>
+                  <span className="font-bold">
+                    {jobs.length} {jobs.length === 1 ? "Opening" : "Openings"}
+                  </span>
+                </motion.div>
               )}
             </div>
 
@@ -179,39 +223,81 @@ const Career = () => {
             ) : jobs.length > 0 ? (
               <div className="space-y-6">
                 {jobs.map((job, index) => (
-                  <div
+                  <motion.div
                     key={job._id}
+                    initial={{ opacity: 0, scale: 0.98, y: 20 }}
+                    whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: index * 0.05 }}
                     className="border-2 border-gray-900 p-8 hover:bg-gray-50 transition-colors group"
                   >
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                       <div className="flex-1">
-                        <h3 className="text-2xl font-black text-gray-900 mb-4">{job.title}</h3>
-                        
+                        <motion.h3
+                          initial={{ opacity: 0, y: 10 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.45 }}
+                          className="text-2xl font-black text-gray-900 mb-4"
+                        >
+                          {job.title}
+                        </motion.h3>
+
                         <div className="flex flex-wrap gap-3 mb-4">
-                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <motion.div
+                            initial={{ opacity: 0, y: 8 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.35, delay: 0.05 }}
+                            className="flex items-center gap-2 text-sm text-gray-600"
+                          >
                             <MapPin className="w-4 h-4" />
                             <span>{job.location}</span>
-                          </div>
-                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                          </motion.div>
+                          <motion.div
+                            initial={{ opacity: 0, y: 8 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.35, delay: 0.08 }}
+                            className="flex items-center gap-2 text-sm text-gray-600"
+                          >
                             <Briefcase className="w-4 h-4" />
                             <span>{job.jobType}</span>
-                          </div>
-                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                          </motion.div>
+                          <motion.div
+                            initial={{ opacity: 0, y: 8 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.35, delay: 0.11 }}
+                            className="flex items-center gap-2 text-sm text-gray-600"
+                          >
                             <Clock className="w-4 h-4" />
                             <span>{job.experience}</span>
-                          </div>
+                          </motion.div>
                           {job.applicationDeadline && (
-                            <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <motion.div
+                              initial={{ opacity: 0, y: 8 }}
+                              whileInView={{ opacity: 1, y: 0 }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 0.35, delay: 0.12 }}
+                              className="flex items-center gap-2 text-sm text-gray-600"
+                            >
                               <Calendar className="w-4 h-4" />
-                              <span>Apply by {formatDate(job.applicationDeadline)}</span>
-                            </div>
+                              <span>
+                                Apply by {formatDate(job.applicationDeadline)}
+                              </span>
+                            </motion.div>
                           )}
                         </div>
 
-                        <p className="text-gray-600 mb-4 line-clamp-2">{job.description}</p>
-                        
+                        <p className="text-gray-600 mb-4 line-clamp-2">
+                          {job.description}
+                        </p>
+
                         {job.salary && (
-                          <p className="text-lg font-bold text-gray-900">{job.salary}</p>
+                          <p className="text-lg font-bold text-gray-900">
+                            {job.salary}
+                          </p>
                         )}
                       </div>
 
@@ -226,15 +312,18 @@ const Career = () => {
                         <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 translate-x-[-100%] group-hover/btn:translate-x-0 transition-transform duration-500"></div>
                       </button>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             ) : (
               <div className="border-2 border-gray-900 p-16 text-center">
                 <Briefcase className="w-16 h-16 mx-auto mb-6 text-gray-400" />
-                <h3 className="text-2xl font-black text-gray-900 mb-4">No Open Positions</h3>
+                <h3 className="text-2xl font-black text-gray-900 mb-4">
+                  No Open Positions
+                </h3>
                 <p className="text-gray-600 max-w-md mx-auto">
-                  We don't have any openings at the moment, but we're always looking for talented people. Check back soon!
+                  We don't have any openings at the moment, but we're always
+                  looking for talented people. Check back soon!
                 </p>
               </div>
             )}
@@ -245,8 +334,10 @@ const Career = () => {
         <section className="py-16">
           <div className="max-w-7xl mx-auto px-6">
             <div className="mb-12">
-              <h2 className="text-4xl font-black text-gray-900 mb-6">Meet Our Team</h2>
-              
+              <h2 className="text-4xl font-black text-gray-900 mb-6">
+                Meet Our Team
+              </h2>
+
               {/* Tab Navigation */}
               <div className="flex gap-4 border-b-2 border-gray-900">
                 {tabs.map((tab) => (
@@ -255,17 +346,19 @@ const Career = () => {
                     onClick={() => setActiveTab(tab.key)}
                     className={`px-6 py-3 font-bold transition-all relative ${
                       activeTab === tab.key
-                        ? 'text-gray-900'
-                        : 'text-gray-400 hover:text-gray-600'
+                        ? "text-gray-900"
+                        : "text-gray-400 hover:text-gray-600"
                     }`}
                   >
                     {tab.label}
                     {tab.count > 0 && (
-                      <span className={`ml-2 px-2 py-1 text-xs font-bold ${
-                        activeTab === tab.key
-                          ? 'bg-gray-900 text-white'
-                          : 'bg-gray-200 text-gray-600'
-                      }`}>
+                      <span
+                        className={`ml-2 px-2 py-1 text-xs font-bold ${
+                          activeTab === tab.key
+                            ? "bg-gray-900 text-white"
+                            : "bg-gray-200 text-gray-600"
+                        }`}
+                      >
                         {tab.count}
                       </span>
                     )}
@@ -306,7 +399,9 @@ const Career = () => {
             </h2>
             <p className="text-xl text-gray-300 mb-8">
               {jobs.length > 0
-                ? `We have ${jobs.length} open position${jobs.length > 1 ? 's' : ''} waiting for the right person. That could be you.`
+                ? `We have ${jobs.length} open position${
+                    jobs.length > 1 ? "s" : ""
+                  } waiting for the right person. That could be you.`
                 : "While we don't have open positions right now, we're always interested in connecting with talented people."}
             </p>
             <div className="w-32 h-1 bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 mx-auto"></div>
@@ -318,11 +413,12 @@ const Career = () => {
       {showApplicationModal && selectedJob && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
           <div className="bg-white border-2 border-gray-900 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            
             {/* Modal Header */}
             <div className="border-b-2 border-gray-900 p-6 flex items-center justify-between sticky top-0 bg-white">
               <div>
-                <h3 className="text-2xl font-black text-gray-900 mb-2">{selectedJob.title}</h3>
+                <h3 className="text-2xl font-black text-gray-900 mb-2">
+                  {selectedJob.title}
+                </h3>
                 <div className="flex gap-3 text-sm text-gray-600">
                   <span>{selectedJob.location}</span>
                   <span>•</span>

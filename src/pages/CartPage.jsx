@@ -9,12 +9,12 @@ import toast from "react-hot-toast";
 const Cart = () => {
   const { auth } = useAuth();
   const navigate = useNavigate();
-  const { 
-    cart, 
-    updateQuantity: updateCartItemQuantity, 
-    removeFromCart: removeCartItem, 
-    getCartTotal, 
-    canAccessCart 
+  const {
+    cart,
+    updateQuantity: updateCartItemQuantity,
+    removeFromCart: removeCartItem,
+    getCartTotal,
+    canAccessCart,
   } = useCart();
 
   const [isRemoving, setIsRemoving] = useState(null);
@@ -43,13 +43,18 @@ const Cart = () => {
   // Show login prompt if user is not authenticated
   if (accessResult === false) {
     return (
-      <Layout title="Cart - Login Required" description="Please login to access your cart">
+      <Layout
+        title="Cart - Login Required"
+        description="Please login to access your cart"
+      >
         <div className="min-h-screen flex items-center justify-center bg-white p-6">
           <div className="max-w-md w-full border-2 border-gray-900 p-12 text-center">
             <div className="w-20 h-20 border-2 border-gray-900 mx-auto mb-8 flex items-center justify-center">
               <ShoppingBag className="w-10 h-10" />
             </div>
-            <h2 className="text-3xl font-black text-gray-900 mb-4">Login Required</h2>
+            <h2 className="text-3xl font-black text-gray-900 mb-4">
+              Login Required
+            </h2>
             <p className="text-gray-600 mb-8">
               Please login to access your shopping cart
             </p>
@@ -97,7 +102,6 @@ const Cart = () => {
   return (
     <Layout title="Cart" description="Your shopping cart">
       <div className="min-h-screen bg-white">
-
         {/* Header */}
         <section className="pt-8 pb-8 border-b-2 border-gray-900">
           <div className="max-w-7xl mx-auto px-6">
@@ -108,7 +112,11 @@ const Cart = () => {
                   Cart
                 </h1>
                 <p className="text-xl text-gray-600">
-                  {cart.length === 0 ? 'Your cart is empty' : `${cart.length} ${cart.length === 1 ? 'item' : 'items'} in your cart`}
+                  {cart.length === 0
+                    ? "Your cart is empty"
+                    : `${cart.length} ${
+                        cart.length === 1 ? "item" : "items"
+                      } in your cart`}
                 </p>
               </div>
             </div>
@@ -128,7 +136,7 @@ const Cart = () => {
               <p className="text-gray-600 mb-8">
                 Start adding products to your cart
               </p>
-              <button
+              {/* <button
                 onClick={() => navigate("/store")}
                 className="group relative px-12 py-5 bg-gray-900 text-white font-bold overflow-hidden"
               >
@@ -137,21 +145,22 @@ const Cart = () => {
                   <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-2" />
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500"></div>
-              </button>
+              </button> */}
             </div>
           </section>
         ) : (
           <section className="py-16">
             <div className="max-w-7xl mx-auto px-6">
               <div className="grid lg:grid-cols-3 gap-12">
-                
                 {/* Cart Items - 2/3 width */}
                 <div className="lg:col-span-2 space-y-6">
                   {cart.map((item) => (
                     <div
                       key={item._id}
                       className={`border-2 border-gray-200 transition-all duration-300 ${
-                        isRemoving === item._id ? 'opacity-0 translate-x-full' : 'opacity-100'
+                        isRemoving === item._id
+                          ? "opacity-0 translate-x-full"
+                          : "opacity-100"
                       }`}
                     >
                       <div className="p-6 flex gap-6">
@@ -179,7 +188,12 @@ const Cart = () => {
                             {/* Quantity Controls */}
                             <div className="flex items-center gap-4">
                               <button
-                                onClick={() => handleQuantityUpdate(item._id, (item.quantity || 1) - 1)}
+                                onClick={() =>
+                                  handleQuantityUpdate(
+                                    item._id,
+                                    (item.quantity || 1) - 1
+                                  )
+                                }
                                 disabled={(item.quantity || 1) <= 1}
                                 className="w-10 h-10 border-2 border-gray-900 flex items-center justify-center hover:bg-gray-900 hover:text-white transition-colors disabled:opacity-30"
                               >
@@ -189,7 +203,12 @@ const Cart = () => {
                                 {item.quantity || 1}
                               </span>
                               <button
-                                onClick={() => handleQuantityUpdate(item._id, (item.quantity || 1) + 1)}
+                                onClick={() =>
+                                  handleQuantityUpdate(
+                                    item._id,
+                                    (item.quantity || 1) + 1
+                                  )
+                                }
                                 className="w-10 h-10 border-2 border-gray-900 flex items-center justify-center hover:bg-gray-900 hover:text-white transition-colors"
                               >
                                 <Plus className="w-4 h-4" />
@@ -199,11 +218,19 @@ const Cart = () => {
                             {/* Price */}
                             <div className="text-right">
                               <div className="text-2xl font-black text-gray-900">
-                                ₹{((item.discountedPrice || item.price) * (item.quantity || 1)).toLocaleString()}
+                                ₹
+                                {(
+                                  (item.discountedPrice || item.price) *
+                                  (item.quantity || 1)
+                                ).toLocaleString()}
                               </div>
                               {item.quantity > 1 && (
                                 <div className="text-sm text-gray-500">
-                                  ₹{(item.discountedPrice || item.price).toLocaleString()} each
+                                  ₹
+                                  {(
+                                    item.discountedPrice || item.price
+                                  ).toLocaleString()}{" "}
+                                  each
                                 </div>
                               )}
                             </div>
@@ -241,7 +268,9 @@ const Cart = () => {
                     <div className="space-y-4 mb-8 pb-8 border-b-2 border-gray-200">
                       <div className="flex justify-between text-gray-600">
                         <span>Items ({itemCount})</span>
-                        <span className="font-bold">₹{totalPrice.toLocaleString()}</span>
+                        <span className="font-bold">
+                          ₹{totalPrice.toLocaleString()}
+                        </span>
                       </div>
                       <div className="flex justify-between text-gray-600">
                         <span>Shipping</span>
@@ -251,7 +280,9 @@ const Cart = () => {
 
                     {/* Total */}
                     <div className="flex justify-between items-center mb-8">
-                      <span className="text-lg font-bold text-gray-900">Total</span>
+                      <span className="text-lg font-bold text-gray-900">
+                        Total
+                      </span>
                       <span className="text-3xl font-black text-gray-900">
                         ₹{totalPrice.toLocaleString()}
                       </span>
@@ -275,12 +306,10 @@ const Cart = () => {
                     </p>
                   </div>
                 </div>
-
               </div>
             </div>
           </section>
         )}
-
       </div>
     </Layout>
   );

@@ -12,7 +12,7 @@ const Home = () => {
       <Hero />
       <GalleryCard />
 
-      <Shop />
+      {/* <Shop /> */}
 
       <Ad />
 

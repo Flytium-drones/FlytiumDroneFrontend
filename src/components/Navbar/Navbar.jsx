@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../Context/auth";
 import { useCart } from "../../Context/cart";
@@ -40,23 +40,22 @@ const Navbar = () => {
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
     { name: "Services", path: "/services" },
-    { name: "Store", path: "/store" },
     { name: "Career", path: "/career" },
     { name: "Contact", path: "/contact" },
   ];
 
   return (
-    <nav className="fixed left-0 right-0 top-0 z-50 flex justify-center px-3 pt-3 sm:px-4 sm:pt-4 pointer-events-none">
-      <div className="w-full max-w-6xl rounded-[2rem] border border-white/15 bg-slate-950/50 px-3 py-2 shadow-[0_18px_45px_rgba(8,47,73,0.35)] backdrop-blur-2xl transition-all duration-300 supports-[backdrop-filter]:bg-slate-950/60 pointer-events-auto sm:rounded-[2.5rem] sm:px-4 sm:py-3">
-        <div className="flex min-h-[56px] items-center justify-between gap-3 md:min-h-[64px] md:gap-6">
+    <nav className="fixed left-0 right-0 top-0 z-50 flex justify-center px-3 pt-2 sm:px-4 sm:pt-3 pointer-events-none">
+      <div className="w-full max-w-5xl rounded-lg border border-white/10 bg-slate-900/40 backdrop-blur-md px-3 py-2 shadow-lg transition-all duration-200 supports-[backdrop-filter]:bg-slate-900/40 pointer-events-auto sm:rounded-xl sm:px-4 sm:py-3">
+        <div className="flex items-center justify-between gap-3 md:gap-6 min-h-[56px] py-1 transition-all duration-300">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 sm:space-x-3">
             <img
               src="/logo.png"
               alt="Flytium Drones"
-              className="h-8 w-auto sm:h-10"
+              className="w-auto h-6 sm:h-8"
             />
-            <span className="text-lg font-semibold tracking-wide text-white drop-shadow sm:text-xl">
+            <span className="text-base tracking-wide text-white drop-shadow font-extrabold sm:text-lg">
               Flytium Drones
             </span>
           </Link>
@@ -72,10 +71,10 @@ const Navbar = () => {
                   className="relative px-4 py-2 group"
                 >
                   <span
-                    className={`relative z-10 font-medium tracking-wide transition-colors duration-300 ${
+                    className={`relative z-10 font-semibold tracking-wide transition-colors duration-200 transform-gpu will-change-transform ${
                       isActive
                         ? "text-white"
-                        : "text-slate-100/80 group-hover:text-white"
+                        : "text-slate-100/80 group-hover:text-white group-hover:-translate-y-0.5"
                     }`}
                   >
                     {item.name}
@@ -85,11 +84,11 @@ const Navbar = () => {
                   {isActive && (
                     <motion.div
                       layoutId="navbar-active-bg"
-                      className="absolute inset-0 rounded-lg bg-gradient-to-r from-emerald-500/80 to-cyan-400/80 shadow-[0_10px_30px_rgba(16,185,129,0.35)]"
+                      className="absolute inset-0 rounded-md bg-gradient-to-r from-emerald-500/90 to-cyan-400/90 shadow-[0_8px_24px_rgba(16,185,129,0.45)] ring-1 ring-emerald-400/20"
                       transition={{
                         type: "spring",
-                        stiffness: 350,
-                        damping: 30,
+                        stiffness: 450,
+                        damping: 28,
                       }}
                     />
                   )}
@@ -97,20 +96,20 @@ const Navbar = () => {
                   {/* Hover effect for non-active items */}
                   {!isActive && (
                     <motion.div
-                      className="absolute inset-0 rounded-lg bg-white/5 opacity-0 group-hover:opacity-100"
-                      transition={{ duration: 0.2 }}
+                      className="absolute inset-0 rounded-md bg-white/6 opacity-0 group-hover:opacity-90 transition-opacity duration-150"
+                      transition={{ duration: 0.15 }}
                     />
                   )}
 
                   {/* Animated underline indicator */}
                   <motion.div
-                    className="absolute -bottom-1 left-1/2 h-0.5 bg-emerald-400"
+                    className="absolute -bottom-1 left-1/2 h-0.5 bg-emerald-400 rounded-full"
                     initial={false}
                     animate={{
                       width: isActive ? "70%" : "0%",
                       x: "-50%",
                     }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    transition={{ type: "spring", stiffness: 260, damping: 22 }}
                   />
                 </Link>
               );
@@ -121,7 +120,7 @@ const Navbar = () => {
           <div className="flex items-center space-x-2 sm:space-x-4">
             {/* Cart Icon */}
             <motion.div
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.06 }}
               whileTap={{ scale: 0.95 }}
               className="relative"
             >
@@ -146,7 +145,7 @@ const Navbar = () => {
                   <motion.span
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-400 text-xs font-semibold text-slate-900"
+                    className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-400 text-xs font-semibold text-slate-900 shadow-sm ring-1 ring-emerald-200"
                   >
                     {cartCount > 99 ? "99+" : cartCount}
                   </motion.span>
@@ -158,10 +157,10 @@ const Navbar = () => {
             {auth?.user ? (
               <div className="relative">
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center space-x-2 rounded-full bg-white/5 px-3 py-2 text-slate-100/80 transition-colors hover:bg-white/10 hover:text-white"
+                  className="flex items-center space-x-2 rounded-full bg-white/6 px-3 py-2 text-slate-100/90 transition-colors hover:bg-white/10 hover:text-white ring-0 focus:outline-none focus:ring-2 focus:ring-emerald-400/30"
                 >
                   <FiUser className="w-6 h-6" />
                   <span className="hidden md:block font-medium">
@@ -266,7 +265,7 @@ const Navbar = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden mt-3 overflow-hidden rounded-[1.75rem] border border-white/10 bg-slate-900/75 px-2 py-3 backdrop-blur-2xl supports-[backdrop-filter]:bg-slate-900/65"
+              className="md:hidden mt-2 overflow-hidden rounded-[1.75rem] border border-white/10 bg-slate-900/40 backdrop-blur-md px-2 py-3 supports-[backdrop-filter]:bg-slate-900/40"
             >
               <div className="space-y-1">
                 {navItems.map((item) => {
