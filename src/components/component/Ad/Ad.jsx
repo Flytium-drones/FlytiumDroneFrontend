@@ -17,8 +17,8 @@ const ProductAdCard = () => {
         setAds(data.ads);
       }
     } catch (error) {
-      console.error(error);
-      toast.error("Failed to load ads");
+      console.error("Error loading ads:", error);
+      // Silently fail if ads cannot be loaded, don't show toast to user
     }
   };
 

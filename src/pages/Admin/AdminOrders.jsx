@@ -33,6 +33,7 @@ const AdminOrders = () => {
   ]);
   const [orders, setOrders] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
   const { auth } = useAuth();
   const [expandedProducts, setExpandedProducts] = useState({});
 
@@ -101,11 +102,19 @@ const AdminOrders = () => {
     }
   };
 
-  const filteredOrders = orders.filter(
-    (order) =>
-      order.buyer?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order._id.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredOrders = orders.filter((order) => {
+    const searchStr = searchTerm.toLowerCase().replace('#', '');
+    const razorpayId = order?.payment?.razorpay_order_id?.toLowerCase() || '';
+    const orderId = order._id.toLowerCase();
+    
+    const matchesSearch = order.buyer?.name.toLowerCase().includes(searchStr) ||
+                          orderId.includes(searchStr) ||
+                          razorpayId.includes(searchStr);
+                          
+    const matchesStatus = statusFilter === "All" || order.status === statusFilter;
+
+    return matchesSearch && matchesStatus;
+  });
 
   const toggleProductDetails = (orderId, productId) => {
     setExpandedProducts((prev) => ({
@@ -151,7 +160,10 @@ const AdminOrders = () => {
 
             {/* Stats */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-              <div className="bg-slate-900 border-2 border-slate-800 p-6">
+              <div 
+                onClick={() => setStatusFilter("All")}
+                className={`bg-slate-900 border-2 p-6 cursor-pointer transition-all ${statusFilter === "All" ? 'border-indigo-600' : 'border-slate-800 hover:border-indigo-400'}`}
+              >
                 <div className="flex items-center gap-3 mb-2">
                   <ShoppingBag className="w-5 h-5 text-indigo-400" />
                   <p className="text-sm font-bold uppercase tracking-wider text-slate-400">Total Orders</p>
@@ -159,7 +171,10 @@ const AdminOrders = () => {
                 <p className="text-4xl font-black text-white">{orders.length}</p>
               </div>
               
-              <div className="bg-slate-900 border-2 border-slate-800 p-6">
+              <div 
+                onClick={() => setStatusFilter("Processing")}
+                className={`bg-slate-900 border-2 p-6 cursor-pointer transition-all ${statusFilter === "Processing" ? 'border-amber-500' : 'border-slate-800 hover:border-amber-400'}`}
+              >
                 <div className="flex items-center gap-3 mb-2">
                   <Clock className="w-5 h-5 text-amber-400" />
                   <p className="text-sm font-bold uppercase tracking-wider text-slate-400">Processing</p>
@@ -169,7 +184,10 @@ const AdminOrders = () => {
                 </p>
               </div>
 
-              <div className="bg-slate-900 border-2 border-slate-800 p-6">
+              <div 
+                onClick={() => setStatusFilter("Delivered")}
+                className={`bg-slate-900 border-2 p-6 cursor-pointer transition-all ${statusFilter === "Delivered" ? 'border-emerald-500' : 'border-slate-800 hover:border-emerald-400'}`}
+              >
                 <div className="flex items-center gap-3 mb-2">
                   <CheckCircle className="w-5 h-5 text-emerald-400" />
                   <p className="text-sm font-bold uppercase tracking-wider text-slate-400">Delivered</p>

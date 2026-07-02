@@ -320,22 +320,28 @@ const CreateCategory = () => {
       </div>
 
       {/* Modal */}
+      {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="bg-slate-900 border-2 border-slate-800 p-8 max-w-md w-full relative">
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 p-2 border-2 border-slate-700 hover:border-red-500 text-slate-400 hover:text-red-400 transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-[#0f172a] border border-slate-800/80 rounded-2xl shadow-2xl w-full max-w-md relative flex flex-col max-h-[90vh]">
+            
+            {/* Sticky Header */}
+            <div className="flex justify-between items-center p-6 border-b border-slate-800/60 bg-[#0f172a] sticky top-0 z-20 rounded-t-2xl shrink-0">
+              <h2 className="text-2xl font-black text-white">
+                {updateId ? "Update Category" : "Create Category"}
+              </h2>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="p-2 rounded-lg bg-slate-800/50 hover:bg-red-500/10 text-slate-400 hover:text-red-400 border border-transparent hover:border-red-500/20 transition-all duration-300"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
-            <h2 className="text-3xl font-black text-white mb-8 pb-6 border-b-2 border-slate-800">
-              {updateId ? "Update Category" : "Create Category"}
-            </h2>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
+            {/* Scrollable Form Body */}
+            <div className="p-6 overflow-y-auto flex-1 custom-scrollbar">
+              <form id="categoryForm" onSubmit={handleSubmit} className="space-y-6">
+                <div>
                 <label className="block text-sm font-bold uppercase tracking-wider text-slate-400 mb-3">
                   Category Image
                 </label>
@@ -403,27 +409,31 @@ const CreateCategory = () => {
                 />
               </div>
 
-              <div className="flex gap-3 pt-4">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="flex-1 px-6 py-3 border-2 border-slate-700 hover:border-slate-600 text-slate-400 hover:text-white font-bold transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isUploading || !image}
-                  className={`flex-1 px-6 py-3 border-2 font-bold transition-all ${
-                    isUploading || !image
-                      ? 'border-slate-700 bg-slate-800 text-slate-500 cursor-not-allowed'
-                      : 'border-indigo-600 bg-indigo-600 hover:bg-transparent text-white'
-                  }`}
-                >
-                  {updateId ? "Update" : "Create"}
-                </button>
-              </div>
-            </form>
+              </form>
+            </div>
+            
+            {/* Sticky Footer */}
+            <div className="p-6 border-t border-slate-800/60 bg-[#0f172a] sticky bottom-0 z-20 flex gap-4 rounded-b-2xl shrink-0">
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(false)}
+                className="flex-1 px-6 py-3 rounded-xl border border-slate-700/50 hover:border-slate-500 bg-slate-800/30 hover:bg-slate-800 text-slate-300 hover:text-white font-bold transition-all duration-300"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                form="categoryForm"
+                disabled={isUploading || !image}
+                className={`flex-1 px-6 py-3 rounded-xl border font-bold transition-all duration-300 flex items-center justify-center gap-2 ${
+                  isUploading || !image
+                    ? 'border-slate-700 bg-slate-800 text-slate-500 cursor-not-allowed'
+                    : 'border-indigo-500/50 bg-indigo-600 hover:bg-indigo-500 hover:shadow-[0_0_20px_rgba(79,70,229,0.3)] text-white'
+                }`}
+              >
+                {updateId ? "Update" : "Create"}
+              </button>
+            </div>
           </div>
         </div>
       )}
