@@ -1,10 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import SEO from "../components/SEO/SEO";
 
 const About = () => {
   return (
-    <div className="bg-white">
+    <>
+      <SEO 
+        title="About Flytium Drones" 
+        description="Learn about our mission and vision. We are pioneering drone technology in India." 
+      />
+      <div className="bg-white">
       {/* Opening Statement - Horizontal Scroll Banner */}
       {/* <section className="py-10 border-b-4 border-gray-900 overflow-hidden">
         <div
@@ -528,7 +534,8 @@ const About = () => {
           </div>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 };
 

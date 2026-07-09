@@ -43,6 +43,7 @@ import ManageEmployees from "./pages/Admin/ManageEmployees";
 import ManageJobs from "./pages/Admin/ManageJobs";
 import JobApplications from "./pages/Admin/JobApplications";
 import ManageContacts from "./pages/Admin/ManageContacts";
+import ManageStoreHero from "./pages/Admin/ManageStoreHero";
 import { LenisProvider } from "./components/LenisProvider";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -58,7 +59,7 @@ const AppContent = () => {
         <Route path="/login-success" element={<Successful />} />
         <Route path="/signup" element={<Account />} />
         <Route path="/register-success" element={<Successful2 />} />
-        {/* <Route path="/store" element={<Store />} /> */}
+        <Route path="/store" element={<Store />} />
         <Route path="/checkout" element={<NewCheckoutPage />} />
         <Route path="/checkout-old" element={<CheckoutPage />} />
         <Route path="/about" element={<About />} />
@@ -79,6 +80,7 @@ const AppContent = () => {
           <Route path="admin/orders" element={<AdminOrders />} />
           <Route path="admin/category" element={<CreateCategory />} />
           <Route path="admin/hero" element={<ManageHero />} />
+          <Route path="admin/store-hero" element={<ManageStoreHero />} />
           <Route path="admin/ads" element={<CreateAd />} />
           <Route path="admin/manage-employees" element={<ManageEmployees />} />
           <Route path="admin/jobs" element={<ManageJobs />} />

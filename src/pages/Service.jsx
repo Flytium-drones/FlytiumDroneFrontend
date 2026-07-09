@@ -9,6 +9,7 @@ import {
   Wrench,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import SEO from "../components/SEO/SEO";
 
 const Service = () => {
   const [activeService, setActiveService] = useState(0);
@@ -104,7 +105,12 @@ const Service = () => {
   ];
 
   return (
-    <div className="bg-white">
+    <>
+      <SEO 
+        title="Our Services - Flytium Drones" 
+        description="Explore our drone services, custom manufacturing, and professional training programs." 
+      />
+      <div className="bg-white">
       {/* Hero Section - Minimal */}
       <section className="pt-8 pb-8 border-b-2 border-gray-900">
         <div className="max-w-7xl mx-auto px-6">
@@ -399,7 +405,8 @@ const Service = () => {
           </div>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 };
 

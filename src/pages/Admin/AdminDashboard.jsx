@@ -109,31 +109,35 @@ const AdminDashboard = () => {
   };
 
   const StatCard = ({ title, value, icon: Icon, trend, trendValue, accentColor }) => (
-    <div className="group relative bg-slate-900 border-2 border-slate-800 hover:border-indigo-600 transition-all overflow-hidden">
-      <div className="p-6">
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex-1">
-            <p className="text-sm font-bold uppercase tracking-wider text-slate-400 mb-2">{title}</p>
-            <h3 className="text-4xl font-black text-white">{value}</h3>
+    <div className="group relative bg-[#0f172a] border border-slate-800/80 rounded-xl hover:border-slate-600 hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+      <div className="p-5 flex flex-col flex-grow relative z-10">
+        <div className="flex items-start justify-between gap-3 mb-auto">
+          <div className="flex-1 min-w-0">
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5 truncate">{title}</p>
+            <h3 className="text-2xl xl:text-3xl font-black text-white break-words">{value}</h3>
           </div>
-          <div className={`p-3 border-2 ${accentColor === 'indigo' ? 'border-indigo-600 bg-indigo-600/10' : accentColor === 'cyan' ? 'border-cyan-500 bg-cyan-500/10' : accentColor === 'amber' ? 'border-amber-500 bg-amber-500/10' : 'border-emerald-500 bg-emerald-500/10'}`}>
-            <Icon className={`w-6 h-6 ${accentColor === 'indigo' ? 'text-indigo-500' : accentColor === 'cyan' ? 'text-cyan-400' : accentColor === 'amber' ? 'text-amber-400' : 'text-emerald-400'}`} />
+          <div className={`shrink-0 p-2.5 rounded-lg border ${
+            accentColor === 'indigo' ? 'border-indigo-500/20 bg-indigo-500/10 text-indigo-400' : 
+            accentColor === 'cyan' ? 'border-cyan-500/20 bg-cyan-500/10 text-cyan-400' : 
+            accentColor === 'amber' ? 'border-amber-500/20 bg-amber-500/10 text-amber-400' : 
+            'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'}`}>
+            <Icon className="w-5 h-5" />
           </div>
         </div>
         {trend && (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 mt-5 pt-4 border-t border-slate-800/60">
             {trend === 'up' ? (
-              <TrendingUp className="w-4 h-4 text-emerald-400" />
+              <TrendingUp className="w-4 h-4 text-emerald-400 shrink-0" />
             ) : (
-              <TrendingDown className="w-4 h-4 text-red-400" />
+              <TrendingDown className="w-4 h-4 text-red-400 shrink-0" />
             )}
-            <span className={`text-sm font-bold ${trend === 'up' ? 'text-emerald-400' : 'text-red-400'}`}>
+            <span className={`text-xs font-bold truncate ${trend === 'up' ? 'text-emerald-400' : 'text-red-400'}`}>
               {trendValue}% from last month
             </span>
           </div>
         )}
       </div>
-      <div className={`absolute inset-0 bg-gradient-to-br ${accentColor === 'indigo' ? 'from-indigo-600/0 via-indigo-600/0 to-indigo-600/5' : accentColor === 'cyan' ? 'from-cyan-500/0 via-cyan-500/0 to-cyan-500/5' : accentColor === 'amber' ? 'from-amber-500/0 via-amber-500/0 to-amber-500/5' : 'from-emerald-500/0 via-emerald-500/0 to-emerald-500/5'} pointer-events-none`}></div>
+      <div className={`absolute inset-0 bg-gradient-to-br ${accentColor === 'indigo' ? 'from-indigo-600/0 to-indigo-600/10' : accentColor === 'cyan' ? 'from-cyan-500/0 to-cyan-500/10' : accentColor === 'amber' ? 'from-amber-500/0 to-amber-500/10' : 'from-emerald-500/0 to-emerald-500/10'} pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
     </div>
   );
 

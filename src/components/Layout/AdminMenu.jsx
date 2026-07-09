@@ -9,7 +9,8 @@ import {
   FileText, 
   Mail, 
   Image as ImageIcon,
-  Tag
+  Tag,
+  LayoutTemplate
 } from "lucide-react";
 
 const AdminMenu = () => {
@@ -18,6 +19,7 @@ const AdminMenu = () => {
     { to: "/dashboard/admin/category", icon: FolderTree, label: "Create Category" },
     { to: "/dashboard/admin/products", icon: Package, label: "Create Product" },
     { to: "/dashboard/admin/hero", icon: ImageIcon, label: "Manage Hero" },
+    { to: "/dashboard/admin/store-hero", icon: LayoutTemplate, label: "Store Hero" },
     { to: "/dashboard/admin/ads", icon: Tag, label: "Manage Ads" },
     { to: "/dashboard/admin/manage-employees", icon: Users, label: "Manage Team" },
     { to: "/dashboard/admin/orders", icon: ShoppingCart, label: "Orders" },

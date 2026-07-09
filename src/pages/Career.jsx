@@ -154,7 +154,7 @@ const Career = () => {
   }
 
   return (
-    <Layout>
+    <Layout title="Careers at Flytium Drones" description="Join our team of innovators and pioneers.">
       <div className="min-h-screen bg-white">
         {/* Hero */}
         <section className="pt-8 pb-8 border-b-2 border-gray-900">
