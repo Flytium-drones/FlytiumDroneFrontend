@@ -4,6 +4,7 @@ import axios from "axios";
 import { API_URL } from "../api";
 import toast from "react-hot-toast";
 import { useCart } from "../Context/cart";
+import SEO from "../components/SEO/SEO";
 import { Minus, Plus, ShoppingCart, ArrowLeft, Tag, Package, ShieldCheck, Truck } from "lucide-react";
 
 const ProductDetails = () => {
@@ -117,7 +118,13 @@ const ProductDetails = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <>
+      <SEO 
+        title={product?.name ? `${product.name} - Flytium Drones` : "Flytium Drones"} 
+        description={product?.description || "High performance nano drones and kits."}
+        image={product?.image}
+      />
+      <div className="min-h-screen bg-white">
       
       {/* Navigation */}
       <div className="border-b-2 border-gray-900">
@@ -266,7 +273,8 @@ const ProductDetails = () => {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

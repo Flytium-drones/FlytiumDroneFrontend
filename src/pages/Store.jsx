@@ -10,6 +10,7 @@ import {
   Users, Wind, Smile, Wrench, Feather, Cpu, Phone, CheckCircle, Star 
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import SEO from "../components/SEO/SEO";
 
 const IconMap = {
   Package, Smartphone, Settings, Compass, Sliders, 
@@ -316,8 +317,12 @@ const Store = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen">
-
+    <>
+      <SEO 
+        title="Flytium Store - Buy Drones" 
+        description="Shop the best nano drones, DIY kits, and accessories." 
+      />
+      <div className="bg-white min-h-screen">
       {/* Premium Nano Drone Featured Sections - Carousel */}
       {(() => {
         const nanoDroneFallback = products.find(p => p.name.toLowerCase().includes('nano')) || { 
@@ -757,7 +762,8 @@ const Store = () => {
         </div>
       </section>
 
-    </div>
+      </div>
+    </>
   );
 };
 
