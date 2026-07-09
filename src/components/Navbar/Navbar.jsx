@@ -206,7 +206,7 @@ const Navbar = () => {
                       {/* Menu Links */}
                       <div className="p-2 space-y-1">
                         <Link
-                          to="dashboard/user/orders"
+                          to="/dashboard/user/orders"
                           className="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-bold text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all group"
                           onClick={() => setUserMenuOpen(false)}
                         >
@@ -217,7 +217,7 @@ const Navbar = () => {
                         </Link>
 
                         <Link
-                          to="dashboard/user/profile"
+                          to="/dashboard/user/profile"
                           className="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-bold text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all group"
                           onClick={() => setUserMenuOpen(false)}
                         >
@@ -228,8 +228,8 @@ const Navbar = () => {
                         </Link>
 
                         {auth?.user?.role === 1 && (
-                          <Link
-                            to="dashboard/admin"
+                            <Link
+                              to="/dashboard/admin"
                             className="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-bold text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all group"
                             onClick={() => setUserMenuOpen(false)}
                           >
