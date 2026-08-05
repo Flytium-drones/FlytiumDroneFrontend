@@ -114,6 +114,24 @@ const CheckoutPage = () => {
         theme: {
           color: "#3B82F6",
         },
+        config: {
+          display: {
+            blocks: {
+              upi: {
+                name: "Pay using UPI",
+                instruments: [
+                  {
+                    method: "upi"
+                  }
+                ]
+              }
+            },
+            sequence: ["block.upi"],
+            preferences: {
+              show_default_blocks: true,
+            }
+          }
+        },
       };
 
       const razorpay = new window.Razorpay(options);
