@@ -39,6 +39,7 @@ const Footer = () => {
               {[
                 { name: "About Us", path: "/about" },
                 { name: "Products", path: "/store" },
+                { name: "Verify Certificate", path: "/verify-certificate" },
                 { name: "Track Orders", path: "/dashboard/user/orders" },
                 { name: "Services", path: "/services" },
                 { name: "Career", path: "/career" },
