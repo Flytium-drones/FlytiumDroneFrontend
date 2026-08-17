@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Layout from "../components/Layout/Layout";
 import axios from "axios";
 import { API_URL } from "../api";
-import { Search, Award, CheckCircle, XCircle, FileText } from "lucide-react";
+import { Search, Award, CheckCircle, XCircle, FileText, Download } from "lucide-react";
 import toast from "react-hot-toast";
 
 const VerifyCertificate = () => {
@@ -125,15 +125,22 @@ const VerifyCertificate = () => {
                           })}
                         </dd>
                       </div>
-                      <div className="sm:col-span-2 mt-4 pt-4 border-t border-gray-100">
+                      <div className="sm:col-span-2 mt-4 pt-4 border-t border-gray-100 flex flex-wrap gap-4">
                         <a
                           href={cert.pdfUrl.replace('.pdf', '.jpg')}
                           target="_blank"
                           rel="noopener noreferrer"
+                          className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                          <FileText className="h-5 w-5 mr-2 text-gray-500" />
+                          View
+                        </a>
+                        <a
+                          href={cert.pdfUrl.replace('/upload/', '/upload/fl_attachment/').replace('.pdf', '.jpg')}
                           className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
-                          <FileText className="h-5 w-5 mr-2" />
-                          View / Download Certificate PDF
+                          <Download className="h-5 w-5 mr-2" />
+                          Download
                         </a>
                       </div>
                     </dl>

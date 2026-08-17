@@ -5,7 +5,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { API_URL } from "../../api";
 import { useAuth } from "../../Context/auth";
-import { Search, Plus, Trash2, FileText, UploadCloud, CheckCircle, Award } from "lucide-react";
+import { Search, Plus, Trash2, FileText, UploadCloud, CheckCircle, Award, Download } from "lucide-react";
 
 const ManageCertificates = () => {
   const [certificates, setCertificates] = useState([]);
@@ -286,15 +286,25 @@ const ManageCertificates = () => {
                             })}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <a 
-                              href={c.pdfUrl.replace('.pdf', '.jpg')} 
-                              target="_blank" 
-                              rel="noopener noreferrer" 
-                              className="inline-flex items-center px-3 py-1.5 bg-blue-500/10 text-blue-400 rounded-md text-sm font-medium hover:bg-blue-500/20 transition-colors"
-                            >
-                              <FileText className="w-4 h-4 mr-1.5" />
-                              View PDF
-                            </a>
+                            <div className="flex space-x-2">
+                              <a 
+                                href={c.pdfUrl.replace('.pdf', '.jpg')} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="inline-flex items-center px-3 py-1.5 bg-blue-500/10 text-blue-400 rounded-md text-sm font-medium hover:bg-blue-500/20 transition-colors"
+                              >
+                                <FileText className="w-4 h-4 mr-1.5" />
+                                View
+                              </a>
+                              <a 
+                                href={c.pdfUrl.replace('/upload/', '/upload/fl_attachment/').replace('.pdf', '.jpg')} 
+                                download
+                                className="inline-flex items-center px-3 py-1.5 bg-green-500/10 text-green-400 rounded-md text-sm font-medium hover:bg-green-500/20 transition-colors"
+                              >
+                                <Download className="w-4 h-4 mr-1.5" />
+                                Download
+                              </a>
+                            </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-right">
                             <button
