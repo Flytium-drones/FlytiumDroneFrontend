@@ -9,11 +9,8 @@ import { useAuth } from "../../Context/auth";
 const ManageCertificates = () => {
   const [certificates, setCertificates] = useState([]);
   const [certificateId, setCertificateId] = useState("");
-  const [studentName, setStudentName] = useState("");
-  const [courseName, setCourseName] = useState("");
-  const [issueDate, setIssueDate] = useState("");
-  const [grade, setGrade] = useState("");
-  const [description, setDescription] = useState("");
+  const [pdfUrl, setPdfUrl] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
   const { auth } = useAuth();
 
   // Get all certificates
@@ -37,31 +34,64 @@ const ManageCertificates = () => {
     }
   }, [auth?.token]);
 
+  // Handle PDF Upload to Cloudinary
+  const handlePdfUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.type !== "application/pdf") {
+      toast.error("Please upload a PDF file");
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "flytium");
+      formData.append("cloud_name", "dhkpwi9ga");
+
+      const response = await fetch(
+        "https://api.cloudinary.com/v1_1/dhkpwi9ga/auto/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+      setPdfUrl(data.secure_url);
+      toast.success("PDF uploaded successfully");
+    } catch (error) {
+      console.error("Error uploading PDF:", error);
+      toast.error("Failed to upload PDF");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!pdfUrl) {
+      toast.error("Please upload the PDF certificate first");
+      return;
+    }
+
     try {
       const { data } = await axios.post(`${API_URL}/api/certificate/create`, {
         certificateId,
-        studentName,
-        courseName,
-        issueDate,
-        grade,
-        description
+        pdfUrl
       }, {
         headers: { Authorization: `Bearer ${auth?.token}` }
       });
       
       if (data?.success) {
-        toast.success(`${studentName}'s certificate is created`);
+        toast.success(`Certificate ${certificateId} created`);
         getAllCertificates();
         // Clear form
         setCertificateId("");
-        setStudentName("");
-        setCourseName("");
-        setIssueDate("");
-        setGrade("");
-        setDescription("");
+        setPdfUrl("");
       } else {
         toast.error(data.message);
       }
@@ -102,6 +132,7 @@ const ManageCertificates = () => {
             <div className="p-3 w-50">
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
+                  <label className="form-label font-bold">Certificate Number / ID</label>
                   <input
                     type="text"
                     className="form-control"
@@ -111,55 +142,22 @@ const ManageCertificates = () => {
                     required
                   />
                 </div>
+                
                 <div className="mb-3">
+                  <label className="form-label font-bold">Upload PDF Certificate</label>
                   <input
-                    type="text"
+                    type="file"
+                    accept=".pdf"
                     className="form-control"
-                    placeholder="Enter Student Name"
-                    value={studentName}
-                    onChange={(e) => setStudentName(e.target.value)}
-                    required
+                    onChange={handlePdfUpload}
+                    disabled={isUploading}
                   />
+                  {isUploading && <p className="mt-2 text-blue-600">Uploading PDF... Please wait.</p>}
+                  {pdfUrl && <p className="mt-2 text-green-600 font-medium">✅ PDF Uploaded Successfully</p>}
                 </div>
-                <div className="mb-3">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Enter Course Name"
-                    value={courseName}
-                    onChange={(e) => setCourseName(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <input
-                    type="date"
-                    className="form-control"
-                    placeholder="Select Issue Date"
-                    value={issueDate}
-                    onChange={(e) => setIssueDate(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Enter Grade (Optional)"
-                    value={grade}
-                    onChange={(e) => setGrade(e.target.value)}
-                  />
-                </div>
-                <div className="mb-3">
-                  <textarea
-                    className="form-control"
-                    placeholder="Enter Description (Optional)"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                  />
-                </div>
-                <button type="submit" className="btn btn-primary">
-                  CREATE CERTIFICATE
+                
+                <button type="submit" className="btn btn-primary" disabled={isUploading}>
+                  {isUploading ? "Uploading..." : "ADD CERTIFICATE"}
                 </button>
               </form>
             </div>
@@ -168,10 +166,8 @@ const ManageCertificates = () => {
               <table className="table">
                 <thead>
                   <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Student</th>
-                    <th scope="col">Course</th>
-                    <th scope="col">Date</th>
+                    <th scope="col">Certificate ID</th>
+                    <th scope="col">PDF Link</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
@@ -179,9 +175,11 @@ const ManageCertificates = () => {
                   {certificates?.map((c) => (
                     <tr key={c._id}>
                       <td>{c.certificateId}</td>
-                      <td>{c.studentName}</td>
-                      <td>{c.courseName}</td>
-                      <td>{new Date(c.issueDate).toLocaleDateString()}</td>
+                      <td>
+                        <a href={c.pdfUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+                          View PDF
+                        </a>
+                      </td>
                       <td>
                         <button
                           className="btn btn-danger ms-2"

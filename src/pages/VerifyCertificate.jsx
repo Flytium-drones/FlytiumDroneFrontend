@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Layout from "../components/Layout/Layout";
 import axios from "axios";
 import { API_URL } from "../api";
-import { Search, Award, CheckCircle, XCircle } from "lucide-react";
+import { Search, Award, CheckCircle, XCircle, FileText } from "lucide-react";
 import toast from "react-hot-toast";
 
 const VerifyCertificate = () => {
@@ -88,54 +88,22 @@ const VerifyCertificate = () => {
           )}
 
           {certificate && (
-            <div className="mt-8 bg-white border border-green-200 rounded-lg shadow-sm overflow-hidden">
-              <div className="bg-green-50 px-6 py-4 border-b border-green-200 flex items-center justify-between">
-                <div className="flex items-center">
-                  <CheckCircle className="h-6 w-6 text-green-500 mr-2" />
-                  <h3 className="text-lg font-medium text-green-800">Verified Authentic Certificate</h3>
-                </div>
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                  Valid
-                </span>
-              </div>
-              <div className="px-6 py-5 border-t border-gray-200">
-                <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
-                  <div className="sm:col-span-1">
-                    <dt className="text-sm font-medium text-gray-500">Student Name</dt>
-                    <dd className="mt-1 text-lg font-semibold text-gray-900">{certificate.studentName}</dd>
-                  </div>
-                  <div className="sm:col-span-1">
-                    <dt className="text-sm font-medium text-gray-500">Certificate ID</dt>
-                    <dd className="mt-1 text-lg font-semibold text-gray-900">{certificate.certificateId}</dd>
-                  </div>
-                  <div className="sm:col-span-1">
-                    <dt className="text-sm font-medium text-gray-500">Course / Program</dt>
-                    <dd className="mt-1 text-lg font-semibold text-gray-900">{certificate.courseName}</dd>
-                  </div>
-                  <div className="sm:col-span-1">
-                    <dt className="text-sm font-medium text-gray-500">Issue Date</dt>
-                    <dd className="mt-1 text-lg font-semibold text-gray-900">
-                      {new Date(certificate.issueDate).toLocaleDateString("en-US", {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
-                    </dd>
-                  </div>
-                  {certificate.grade && (
-                    <div className="sm:col-span-1">
-                      <dt className="text-sm font-medium text-gray-500">Grade</dt>
-                      <dd className="mt-1 text-lg font-semibold text-gray-900">{certificate.grade}</dd>
-                    </div>
-                  )}
-                  {certificate.description && (
-                    <div className="sm:col-span-2">
-                      <dt className="text-sm font-medium text-gray-500">Description</dt>
-                      <dd className="mt-1 text-base text-gray-900">{certificate.description}</dd>
-                    </div>
-                  )}
-                </dl>
-              </div>
+            <div className="mt-8 bg-white border border-green-200 rounded-lg shadow-sm overflow-hidden text-center p-8">
+              <CheckCircle className="mx-auto h-16 w-16 text-green-500 mb-4" />
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Verified Authentic Certificate</h3>
+              <p className="text-gray-600 mb-6">
+                Certificate ID: <span className="font-semibold text-gray-900">{certificate.certificateId}</span>
+              </p>
+              
+              <a
+                href={certificate.pdfUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <FileText className="h-5 w-5 mr-2" />
+                View / Download Certificate
+              </a>
             </div>
           )}
 
