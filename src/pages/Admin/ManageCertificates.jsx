@@ -13,8 +13,6 @@ const ManageCertificates = () => {
   const [studentName, setStudentName] = useState("");
   const [courseName, setCourseName] = useState("");
   const [issueDate, setIssueDate] = useState("");
-  const [grade, setGrade] = useState("");
-  const [description, setDescription] = useState("");
   const [pdfUrl, setPdfUrl] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -93,8 +91,6 @@ const ManageCertificates = () => {
         studentName,
         courseName,
         issueDate,
-        grade,
-        description,
         pdfUrl
       }, {
         headers: { Authorization: `Bearer ${auth?.token}` }
@@ -108,8 +104,6 @@ const ManageCertificates = () => {
         setStudentName("");
         setCourseName("");
         setIssueDate("");
-        setGrade("");
-        setDescription("");
         setPdfUrl("");
       } else {
         toast.error(data.message);
@@ -214,28 +208,6 @@ const ManageCertificates = () => {
                       value={issueDate}
                       onChange={(e) => setIssueDate(e.target.value)}
                       required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-400 mb-2">Grade / Score (Optional)</label>
-                    <input
-                      type="text"
-                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
-                      placeholder="e.g. A+"
-                      value={grade}
-                      onChange={(e) => setGrade(e.target.value)}
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-400 mb-2">Description (Optional)</label>
-                    <textarea
-                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
-                      placeholder="Additional details..."
-                      rows="2"
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
                     />
                   </div>
 

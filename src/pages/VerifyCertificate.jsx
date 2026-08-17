@@ -122,18 +122,6 @@ const VerifyCertificate = () => {
                       })}
                     </dd>
                   </div>
-                  {certificate.grade && (
-                    <div className="sm:col-span-1">
-                      <dt className="text-sm font-medium text-gray-500">Grade</dt>
-                      <dd className="mt-1 text-lg font-semibold text-gray-900">{certificate.grade}</dd>
-                    </div>
-                  )}
-                  {certificate.description && (
-                    <div className="sm:col-span-2">
-                      <dt className="text-sm font-medium text-gray-500">Description</dt>
-                      <dd className="mt-1 text-base text-gray-900">{certificate.description}</dd>
-                    </div>
-                  )}
                   <div className="sm:col-span-2 mt-4 pt-4 border-t border-gray-100">
                     <a
                       href={certificate.pdfUrl}
