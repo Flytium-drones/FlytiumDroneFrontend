@@ -5,7 +5,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { API_URL } from "../../api";
 import { useAuth } from "../../Context/auth";
-import { Search, Plus, Trash2, FileText, UploadCloud, CheckCircle } from "lucide-react";
+import { Search, Plus, Trash2, FileText, UploadCloud, CheckCircle, Award } from "lucide-react";
 
 const ManageCertificates = () => {
   const [certificates, setCertificates] = useState([]);
