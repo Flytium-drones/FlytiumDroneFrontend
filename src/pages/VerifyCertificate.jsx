@@ -127,7 +127,7 @@ const VerifyCertificate = () => {
                       </div>
                       <div className="sm:col-span-2 mt-4 pt-4 border-t border-gray-100">
                         <a
-                          href={cert.pdfUrl}
+                          href={cert.pdfUrl.replace('.pdf', '.jpg')}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

@@ -287,7 +287,7 @@ const ManageCertificates = () => {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <a 
-                              href={c.pdfUrl} 
+                              href={c.pdfUrl.replace('.pdf', '.jpg')} 
                               target="_blank" 
                               rel="noopener noreferrer" 
                               className="inline-flex items-center px-3 py-1.5 bg-blue-500/10 text-blue-400 rounded-md text-sm font-medium hover:bg-blue-500/20 transition-colors"
