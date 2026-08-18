@@ -135,7 +135,7 @@ const CheckoutPage = () => {
 
         clearCart();
         toast.success("Order placed successfully via Cash on Delivery! 🎉");
-        navigate("dashboard/user/orders", { state: { orderSuccess: true, orderId: data.order._id } });
+        navigate("/dashboard/user/orders", { state: { orderSuccess: true, orderId: data.order._id } });
         return;
       }
 
@@ -231,7 +231,7 @@ const CheckoutPage = () => {
         toast.success("Order placed successfully! 🎉");
         
         // Redirect to orders page with success message
-        navigate("dashboard/user/orders", { 
+        navigate("/dashboard/user/orders", { 
           state: { 
             orderSuccess: true, 
             orderId: data.order._id 
