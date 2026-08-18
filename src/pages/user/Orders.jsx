@@ -4,12 +4,16 @@ import axios from "axios";
 import { useAuth } from "../../Context/auth";
 import { API_URL } from "../../api";
 import moment from "moment";
-import { Package, Calendar, DollarSign, User, CheckCircle, Clock, ChevronDown, ChevronUp } from "lucide-react";
+import { Package, Calendar, DollarSign, User, CheckCircle, Clock, ChevronDown, ChevronUp, X, Truck, XCircle } from "lucide-react";
+import toast from "react-hot-toast";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [sortNewestFirst, setSortNewestFirst] = useState(true);
   const [expandedOrders, setExpandedOrders] = useState({});
+  const [cancelModalOpen, setCancelModalOpen] = useState(false);
+  const [cancellingOrderId, setCancellingOrderId] = useState(null);
+  const [cancelReason, setCancelReason] = useState("");
   const { auth } = useAuth();
 
   const getOrders = async () => {
@@ -46,6 +50,35 @@ const Orders = () => {
       ...prev,
       [orderId]: !prev[orderId]
     }));
+  };
+
+  const handleCancelOrder = async () => {
+    if (!cancelReason.trim()) {
+      toast.error("Please provide a reason for cancellation");
+      return;
+    }
+    
+    try {
+      const response = await axios.put(
+        `${API_URL}/api/payment/cancel-order/${cancellingOrderId}`,
+        { cancelReason },
+        {
+          headers: {
+            Authorization: `Bearer ${auth?.token}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        toast.success("Order cancelled successfully");
+        setCancelModalOpen(false);
+        setCancelReason("");
+        setCancellingOrderId(null);
+        getOrders(); // Refresh orders
+      }
+    } catch (error) {
+      console.log("Cancel Order Error:", error);
+      toast.error(error.response?.data?.message || "Failed to cancel order");
+    }
   };
 
   return (
@@ -97,7 +130,7 @@ const Orders = () => {
                 >
                   {/* Order Header */}
                   <div className="bg-gray-50 p-6 border-b-2 border-gray-900">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                    <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
                       <div className="flex items-start gap-3">
                         <Package className="w-5 h-5 mt-1 flex-shrink-0" />
                         <div>
@@ -145,19 +178,43 @@ const Orders = () => {
                           )}
                         </div>
                       </div>
+
+                      <div className="flex items-start gap-3">
+                        <Truck className="w-5 h-5 mt-1 flex-shrink-0" />
+                        <div>
+                          <p className="text-xs font-bold uppercase tracking-wider text-gray-600 mb-1">Status</p>
+                          <div className={`inline-block px-3 py-1 text-white text-sm font-bold ${order.status === 'Processing' ? 'bg-blue-500' : order.status === 'Shipped' ? 'bg-purple-500' : order.status === 'Delivered' ? 'bg-green-500' : order.status === 'Cancelled' ? 'bg-red-500' : 'bg-gray-500'}`}>
+                            {order.status || 'Processing'}
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
-                    <button
-                      onClick={() => toggleOrderExpanded(order._id)}
-                      className="w-full flex items-center justify-between px-4 py-3 border-2 border-gray-900 hover:bg-white transition-colors font-bold"
-                    >
-                      <span>{expandedOrders[order._id] ? 'Hide' : 'View'} Order Details ({order?.products?.length} items)</span>
-                      {expandedOrders[order._id] ? (
-                        <ChevronUp className="w-5 h-5" />
-                      ) : (
-                        <ChevronDown className="w-5 h-5" />
+                    <div className="flex flex-col sm:flex-row gap-2 mt-4">
+                      <button
+                        onClick={() => toggleOrderExpanded(order._id)}
+                        className="flex-1 flex items-center justify-between px-4 py-3 border-2 border-gray-900 hover:bg-white transition-colors font-bold"
+                      >
+                        <span>{expandedOrders[order._id] ? 'Hide' : 'View'} Order Details ({order?.products?.length} items)</span>
+                        {expandedOrders[order._id] ? (
+                          <ChevronUp className="w-5 h-5" />
+                        ) : (
+                          <ChevronDown className="w-5 h-5" />
+                        )}
+                      </button>
+
+                      {order.status !== 'Shipped' && order.status !== 'Delivered' && order.status !== 'Cancelled' && (
+                        <button
+                          onClick={() => {
+                            setCancellingOrderId(order._id);
+                            setCancelModalOpen(true);
+                          }}
+                          className="sm:w-auto w-full flex items-center justify-center px-6 py-3 border-2 border-red-600 text-red-600 hover:bg-red-50 transition-colors font-bold"
+                        >
+                          Cancel Order
+                        </button>
                       )}
-                    </button>
+                    </div>
                   </div>
 
                   {/* Order Items (Expandable) */}
@@ -219,6 +276,59 @@ const Orders = () => {
           )}
         </div>
       </div>
+
+      {/* Cancel Modal */}
+      {cancelModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+          <div className="bg-white max-w-md w-full border-2 border-gray-900 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-black text-gray-900">Cancel Order</h3>
+              <button 
+                onClick={() => {
+                  setCancelModalOpen(false);
+                  setCancelReason("");
+                  setCancellingOrderId(null);
+                }}
+                className="p-1 hover:bg-gray-100 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <div className="mb-6">
+              <label className="block text-sm font-bold text-gray-700 mb-2">
+                Reason for cancellation <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+                placeholder="Please tell us why you are cancelling..."
+                className="w-full px-4 py-3 border-2 border-gray-900 focus:outline-none focus:ring-0 min-h-[120px] resize-y"
+                required
+              />
+            </div>
+            
+            <div className="flex gap-4">
+              <button
+                onClick={() => {
+                  setCancelModalOpen(false);
+                  setCancelReason("");
+                  setCancellingOrderId(null);
+                }}
+                className="flex-1 px-6 py-3 border-2 border-gray-900 text-gray-900 font-bold hover:bg-gray-50 transition-colors"
+              >
+                Keep Order
+              </button>
+              <button
+                onClick={handleCancelOrder}
+                className="flex-1 px-6 py-3 bg-red-600 text-white font-bold hover:bg-red-700 transition-colors border-2 border-red-600"
+              >
+                Confirm Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </Layout>
   );
 };
