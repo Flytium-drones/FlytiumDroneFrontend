@@ -25,6 +25,7 @@ const CheckoutPage = () => {
   
   const [loading, setLoading] = useState(false);
   const [paymentProcessing, setPaymentProcessing] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("online");
   const [shippingAddress, setShippingAddress] = useState({
     name: auth?.user?.name || "",
     email: auth?.user?.email || "",
@@ -116,24 +117,33 @@ const CheckoutPage = () => {
     setPaymentProcessing(true);
 
     try {
-      // Create order on backend
       const orderData = {
         useCart: true,
-        cartItems: cart, // Send cart items from context
+        cartItems: cart,
         totalAmount: getCartTotal(),
         shippingAddress
       };
 
-      console.log("Creating order with data:", orderData);
+      if (paymentMethod === "cod") {
+        const { data } = await axios.post(
+          `${API_URL}/api/payment/create-cod-order`,
+          { orderDetails: { products: cart, totalAmount: getCartTotal(), shippingAddress }, useCart: true },
+          { headers: { Authorization: `Bearer ${auth?.token}` } }
+        );
 
+        if (!data.success) throw new Error(data.message || "Failed to place COD order");
+
+        clearCart();
+        toast.success("Order placed successfully via Cash on Delivery! 🎉");
+        navigate("dashboard/user/orders", { state: { orderSuccess: true, orderId: data.order._id } });
+        return;
+      }
+
+      // Create order on backend for Razorpay
       const { data } = await axios.post(
         `${API_URL}/api/payment/create-order`,
         orderData,
-        {
-          headers: {
-            Authorization: `Bearer ${auth?.token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${auth?.token}` } }
       );
 
       if (!data.success) {
@@ -453,6 +463,51 @@ const CheckoutPage = () => {
                   </div>
                 </div>
 
+                {/* Payment Method Selection */}
+                <div className="border-t border-gray-200 pt-6 mt-6 space-y-3">
+                  <h3 className="text-gray-800 font-semibold mb-3">Payment Method</h3>
+                  
+                  <label className={`flex items-center p-4 border rounded-xl cursor-pointer transition-all ${paymentMethod === 'online' ? 'border-blue-600 bg-blue-50 ring-1 ring-blue-600' : 'border-gray-200 hover:bg-gray-50'}`}>
+                    <input 
+                      type="radio" 
+                      name="paymentMethod" 
+                      value="online" 
+                      checked={paymentMethod === 'online'} 
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                      className="w-5 h-5 text-blue-600 border-gray-300 focus:ring-blue-500"
+                    />
+                    <div className="ml-4 flex items-center gap-3">
+                      <div className={`p-2 rounded-lg ${paymentMethod === 'online' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500'}`}>
+                        <FiCreditCard className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <span className={`block font-medium ${paymentMethod === 'online' ? 'text-blue-800' : 'text-gray-700'}`}>Online Payment</span>
+                        <span className="text-xs text-gray-500">Cards, UPI, Netbanking via Razorpay</span>
+                      </div>
+                    </div>
+                  </label>
+
+                  <label className={`flex items-center p-4 border rounded-xl cursor-pointer transition-all ${paymentMethod === 'cod' ? 'border-blue-600 bg-blue-50 ring-1 ring-blue-600' : 'border-gray-200 hover:bg-gray-50'}`}>
+                    <input 
+                      type="radio" 
+                      name="paymentMethod" 
+                      value="cod" 
+                      checked={paymentMethod === 'cod'} 
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                      className="w-5 h-5 text-blue-600 border-gray-300 focus:ring-blue-500"
+                    />
+                    <div className="ml-4 flex items-center gap-3">
+                      <div className={`p-2 rounded-lg ${paymentMethod === 'cod' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500'}`}>
+                        <FiShoppingBag className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <span className={`block font-medium ${paymentMethod === 'cod' ? 'text-blue-800' : 'text-gray-700'}`}>Cash on Delivery</span>
+                        <span className="text-xs text-gray-500">Pay when you receive the product</span>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+
                 {/* Payment Button */}
                 <AnimatePresence>
                   <motion.button
@@ -483,17 +538,19 @@ const CheckoutPage = () => {
                       <>
                         <FiLock className="w-5 h-5" />
                         <FiCreditCard className="w-5 h-5" />
-                        Pay ₹{getCartTotal().toLocaleString()} Securely
+                        {paymentMethod === 'online' ? 'Pay Securely' : 'Place Order via COD'} - ₹{getCartTotal().toLocaleString()}
                       </>
                     )}
                   </motion.button>
                 </AnimatePresence>
 
                 {/* Security Badge */}
-                <div className="mt-4 flex items-center justify-center gap-2 text-sm text-gray-500">
-                  <FiLock className="w-4 h-4" />
-                  <span>Secured by Razorpay SSL encryption</span>
-                </div>
+                {paymentMethod === 'online' && (
+                  <div className="mt-4 flex items-center justify-center gap-2 text-sm text-gray-500">
+                    <FiLock className="w-4 h-4" />
+                    <span>Secured by Razorpay SSL encryption</span>
+                  </div>
+                )}
               </div>
             </motion.div>
           </div>

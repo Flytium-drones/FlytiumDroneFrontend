@@ -130,7 +130,11 @@ const Orders = () => {
                         <CheckCircle className="w-5 h-5 mt-1 flex-shrink-0" />
                         <div>
                           <p className="text-xs font-bold uppercase tracking-wider text-gray-600 mb-1">Payment</p>
-                          {order?.payment?.razorpay_payment_id ? (
+                          {order?.payment?.method === "COD" ? (
+                            <div className="inline-block px-3 py-1 bg-yellow-500 text-gray-900 text-sm font-bold">
+                              COD
+                            </div>
+                          ) : order?.payment?.razorpay_payment_id ? (
                             <div className="inline-block px-3 py-1 bg-emerald-600 text-white text-sm font-bold">
                               PAID
                             </div>

@@ -263,11 +263,13 @@ const AdminOrders = () => {
                           <div>
                             <p className="text-xs text-slate-500 font-bold uppercase mb-2">Payment Status</p>
                             <div className={`px-4 py-2 border-2 ${
-                              order?.payment?.razorpay_payment_id
-                                ? "border-emerald-500 bg-emerald-500/10 text-emerald-400"
-                                : "border-red-500 bg-red-500/10 text-red-400"
+                              order?.payment?.method === "COD" 
+                                ? "border-yellow-500 bg-yellow-500/10 text-yellow-400"
+                                : order?.payment?.razorpay_payment_id
+                                  ? "border-emerald-500 bg-emerald-500/10 text-emerald-400"
+                                  : "border-red-500 bg-red-500/10 text-red-400"
                             } font-bold`}>
-                              {order?.payment?.razorpay_payment_id ? "PAID" : "PENDING"}
+                              {order?.payment?.method === "COD" ? "COD" : order?.payment?.razorpay_payment_id ? "PAID" : "PENDING"}
                             </div>
                             {order?.payment?.razorpay_payment_id && (
                               <p className="text-xs text-slate-500 mt-1">
