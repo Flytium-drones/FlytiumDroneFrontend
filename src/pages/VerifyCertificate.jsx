@@ -20,7 +20,7 @@ const VerifyCertificate = () => {
       setError(false);
       setCertificates([]);
       
-      const { data } = await axios.get(`${API_URL}/api/certificate/verify/${searchQuery}`);
+      const { data } = await axios.get(`${API_URL}/api/certificate/verify/${searchQuery.trim()}`);
       
       if (data?.success) {
         setCertificates(data.certificates);
