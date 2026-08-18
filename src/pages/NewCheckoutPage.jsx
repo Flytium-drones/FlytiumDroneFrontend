@@ -160,24 +160,7 @@ const CheckoutPage = () => {
         theme: {
           color: "#667eea",
         },
-        config: {
-          display: {
-            blocks: {
-              upi: {
-                name: "Pay using UPI",
-                instruments: [
-                  {
-                    method: "upi"
-                  }
-                ]
-              }
-            },
-            sequence: ["block.upi"],
-            preferences: {
-              show_default_blocks: true,
-            }
-          }
-        },
+
         handler: async (response) => {
           console.log("Payment successful:", response);
           await handlePaymentSuccess(response, data.orderDetails);
