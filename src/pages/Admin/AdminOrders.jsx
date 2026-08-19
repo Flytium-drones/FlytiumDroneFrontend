@@ -325,63 +325,46 @@ const AdminOrders = () => {
                         </div>
                       </div>
 
-                      {/* Products Grid */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                      {/* Products List */}
+                      <div className="space-y-4">
                         {order.products?.map((item, idx) => (
                           <div
                             key={idx}
-                            className="border-2 border-slate-800 hover:border-cyan-500 transition-all overflow-hidden group"
+                            className="flex flex-col sm:flex-row items-center sm:items-stretch border-2 border-slate-800 p-4 gap-4 hover:border-cyan-500 transition-all group bg-slate-900"
                           >
-                            <div className="aspect-square bg-slate-800">
+                            <div className="w-24 h-24 sm:w-20 sm:h-20 bg-slate-800 flex-shrink-0 flex items-center justify-center">
                               <img
                                 src={item.image}
                                 alt={item.name}
-                                className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform"
+                                className="max-w-full max-h-full object-contain p-2 group-hover:scale-105 transition-transform"
                               />
                             </div>
 
-                            <div className="p-4 bg-slate-800/50">
-                              <h4 className="font-black text-white text-sm mb-2 line-clamp-1">
-                                {item.name}
-                              </h4>
-                              <div className="flex justify-between items-center mb-2">
-                                <p className="text-lg font-black text-cyan-400">₹{item.price}</p>
-                                <p className="text-xs px-2 py-1 bg-slate-900 text-white font-bold">
-                                  Qty: {item.quantity}
+                            <div className="flex-1 flex flex-col sm:flex-row justify-between items-center sm:items-center w-full gap-4">
+                              <div className="text-center sm:text-left flex-1 min-w-0">
+                                <h4 className="font-black text-white text-base mb-1 truncate">
+                                  {item.name}
+                                </h4>
+                                <p className="text-sm text-slate-400 truncate mb-1">
+                                  {item.description}
                                 </p>
+                                <span className="text-xs text-slate-500 font-bold">Category: {item.category?.name}</span>
                               </div>
-                              <p className="text-sm font-bold text-emerald-400">
-                                Total: ₹{item.price * item.quantity}
-                              </p>
-
-                              <button
-                                onClick={() => toggleProductDetails(order._id, idx)}
-                                className="mt-3 w-full flex items-center justify-center gap-2 px-3 py-2 border-2 border-slate-700 hover:border-indigo-600 text-slate-400 hover:text-white text-xs font-bold transition-colors"
-                              >
-                                {expandedProducts[`${order._id}-${idx}`] ? (
-                                  <>
-                                    <ChevronUp className="w-4 h-4" />
-                                    Hide Details
-                                  </>
-                                ) : (
-                                  <>
-                                    <ChevronDown className="w-4 h-4" />
-                                    Show Details
-                                  </>
-                                )}
-                              </button>
-
-                              {expandedProducts[`${order._id}-${idx}`] && (
-                                <div className="mt-3 pt-3 border-t-2 border-slate-800">
-                                  <p className="text-sm text-slate-400 line-clamp-3 mb-2">
-                                    {item.description}
-                                  </p>
-                                  <div className="text-sm">
-                                    <span className="text-slate-500">Category: </span>
-                                    <span className="text-white font-bold">{item.category?.name}</span>
-                                  </div>
+                              
+                              <div className="flex items-center gap-4 sm:gap-8 text-center sm:text-right">
+                                <div>
+                                  <p className="text-slate-500 uppercase font-bold text-[10px] tracking-wider mb-1">Price</p>
+                                  <p className="text-sm font-black text-cyan-400">₹{item.price}</p>
                                 </div>
-                              )}
+                                <div>
+                                  <p className="text-slate-500 uppercase font-bold text-[10px] tracking-wider mb-1">Qty</p>
+                                  <p className="text-sm font-black text-white px-2 py-0.5 bg-slate-800">{item.quantity}</p>
+                                </div>
+                                <div>
+                                  <p className="text-slate-500 uppercase font-bold text-[10px] tracking-wider mb-1">Total</p>
+                                  <p className="text-sm font-black text-emerald-400">₹{item.price * item.quantity}</p>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         ))}
