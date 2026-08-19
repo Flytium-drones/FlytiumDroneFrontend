@@ -4,7 +4,7 @@ import axios from "axios";
 import { useAuth } from "../../Context/auth";
 import { API_URL } from "../../api";
 import moment from "moment";
-import { Package, Calendar, DollarSign, User, CheckCircle, Clock, ChevronDown, ChevronUp, X, Truck, XCircle } from "lucide-react";
+import { Package, Calendar, IndianRupee, User, CheckCircle, Clock, ChevronDown, ChevronUp, X, Truck, XCircle } from "lucide-react";
 import toast from "react-hot-toast";
 
 const Orders = () => {
@@ -150,7 +150,7 @@ const Orders = () => {
                       </div>
 
                       <div className="flex items-start gap-3">
-                        <DollarSign className="w-5 h-5 mt-1 flex-shrink-0" />
+                        <IndianRupee className="w-5 h-5 mt-1 flex-shrink-0" />
                         <div>
                           <p className="text-xs font-bold uppercase tracking-wider text-gray-600 mb-1">Total</p>
                           <p className="text-lg font-black text-gray-900">
