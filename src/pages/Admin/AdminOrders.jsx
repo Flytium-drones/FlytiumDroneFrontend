@@ -222,7 +222,7 @@ const AdminOrders = () => {
                           <div>
                             <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Order ID</p>
                             <p className="text-lg font-black text-white">
-                              #{order?.payment?.razorpay_order_id?.slice(-8) || order._id.slice(-8)}
+                              #{order._id?.slice(-6).toUpperCase()}
                             </p>
                           </div>
                         </div>
