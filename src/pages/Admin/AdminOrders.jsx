@@ -35,7 +35,7 @@ const AdminOrders = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const { auth } = useAuth();
-  const [expandedProducts, setExpandedProducts] = useState({});
+  const [expandedOrders, setExpandedOrders] = useState({});
 
   const getOrders = async () => {
     try {
@@ -116,10 +116,10 @@ const AdminOrders = () => {
     return matchesSearch && matchesStatus;
   });
 
-  const toggleProductDetails = (orderId, productId) => {
-    setExpandedProducts((prev) => ({
+  const toggleOrderExpanded = (orderId) => {
+    setExpandedOrders((prev) => ({
       ...prev,
-      [`${orderId}-${productId}`]: !prev[`${orderId}-${productId}`],
+      [orderId]: !prev[orderId],
     }));
   };
 
@@ -255,121 +255,135 @@ const AdminOrders = () => {
                         </div>
                       </div>
                     </div>
+                    
+                    <button
+                      onClick={() => toggleOrderExpanded(order._id)}
+                      className="w-full flex items-center justify-between px-6 py-3 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors text-sm font-bold"
+                    >
+                      <span>{expandedOrders[order._id] ? 'Hide' : 'View'} Order Details</span>
+                      {expandedOrders[order._id] ? (
+                        <ChevronUp className="w-5 h-5" />
+                      ) : (
+                        <ChevronDown className="w-5 h-5" />
+                      )}
+                    </button>
 
-                    <div className="p-6">
-                      {/* Status and Payment */}
-                      <div className="flex flex-wrap gap-6 items-center justify-between mb-6 pb-6 border-b-2 border-slate-800">
-                        <div className="flex items-center gap-6">
-                          <div>
-                            <p className="text-xs text-slate-500 font-bold uppercase mb-2">Payment Status</p>
-                            <div className={`px-4 py-2 border-2 ${
-                              order?.payment?.method === "COD" 
-                                ? "border-yellow-500 bg-yellow-500/10 text-yellow-400"
-                                : order?.payment?.razorpay_payment_id
-                                  ? "border-emerald-500 bg-emerald-500/10 text-emerald-400"
-                                  : "border-red-500 bg-red-500/10 text-red-400"
-                            } font-bold`}>
-                              {order?.payment?.method === "COD" ? "COD" : order?.payment?.razorpay_payment_id ? "PAID" : "PENDING"}
-                            </div>
-                            {order?.payment?.razorpay_payment_id && (
-                              <p className="text-xs text-slate-500 mt-1">
-                                ID: {order.payment.razorpay_payment_id.slice(-8)}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-
-                        <div>
-                          <p className="text-xs text-slate-500 font-bold uppercase mb-2">Order Status</p>
-                          <Select
-                            defaultValue={order?.status}
-                            style={{ width: 160 }}
-                            onChange={(value) => handleChange(value, order._id)}
-                            className="dark-select"
-                          >
-                            {status.map((item, index) => (
-                              <Select.Option key={index} value={item}>
-                                {item}
-                              </Select.Option>
-                            ))}
-                          </Select>
-                        </div>
-                      </div>
-
-                      {/* Shipping Address */}
-                      <div className="mb-6 p-6 bg-slate-800/50 border-2 border-slate-800">
-                        <div className="flex items-center gap-3 mb-4 pb-4 border-b-2 border-slate-800">
-                          <MapPin className="w-5 h-5 text-indigo-400" />
-                          <h3 className="text-xl font-black text-white">Shipping Address</h3>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          <div className="space-y-2">
-                            <p className="text-lg font-bold text-white">{order.shippingAddress?.name}</p>
-                            <p className="text-slate-400">{order.shippingAddress?.address}</p>
-                            <p className="text-slate-400">
-                              {order.shippingAddress?.city}, {order.shippingAddress?.state}
-                            </p>
-                            <p className="text-slate-400">PIN: {order.shippingAddress?.pincode}</p>
-                          </div>
-                          <div className="space-y-2">
-                            <div className="flex items-center gap-2">
-                              <Mail className="w-4 h-4 text-cyan-400" />
-                              <p className="text-slate-400">{order.shippingAddress?.email}</p>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Phone className="w-4 h-4 text-amber-400" />
-                              <p className="text-slate-400">{order.shippingAddress?.phone}</p>
-                            </div>
-                            <p className="text-slate-400">Country: {order.shippingAddress?.country || 'India'}</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Products List */}
-                      <div className="space-y-4">
-                        {order.products?.map((item, idx) => (
-                          <div
-                            key={idx}
-                            className="flex flex-col sm:flex-row items-center sm:items-stretch border-2 border-slate-800 p-4 gap-4 hover:border-cyan-500 transition-all group bg-slate-900"
-                          >
-                            <div className="w-24 h-24 sm:w-20 sm:h-20 bg-slate-800 flex-shrink-0 flex items-center justify-center">
-                              <img
-                                src={item.image}
-                                alt={item.name}
-                                className="max-w-full max-h-full object-contain p-2 group-hover:scale-105 transition-transform"
-                              />
-                            </div>
-
-                            <div className="flex-1 flex flex-col sm:flex-row justify-between items-center sm:items-center w-full gap-4">
-                              <div className="text-center sm:text-left flex-1 min-w-0">
-                                <h4 className="font-black text-white text-base mb-1 truncate">
-                                  {item.name}
-                                </h4>
-                                <p className="text-sm text-slate-400 truncate mb-1">
-                                  {item.description}
+                    {expandedOrders[order._id] && (
+                      <div className="p-6">
+                        {/* Status and Payment */}
+                        <div className="flex flex-wrap gap-6 items-center justify-between mb-6 pb-6 border-b-2 border-slate-800">
+                          <div className="flex items-center gap-6">
+                            <div>
+                              <p className="text-xs text-slate-500 font-bold uppercase mb-2">Payment Status</p>
+                              <div className={`px-4 py-2 border-2 ${
+                                order?.payment?.method === "COD" 
+                                  ? "border-yellow-500 bg-yellow-500/10 text-yellow-400"
+                                  : order?.payment?.razorpay_payment_id
+                                    ? "border-emerald-500 bg-emerald-500/10 text-emerald-400"
+                                    : "border-red-500 bg-red-500/10 text-red-400"
+                              } font-bold`}>
+                                {order?.payment?.method === "COD" ? "COD" : order?.payment?.razorpay_payment_id ? "PAID" : "PENDING"}
+                              </div>
+                              {order?.payment?.razorpay_payment_id && (
+                                <p className="text-xs text-slate-500 mt-1">
+                                  ID: {order.payment.razorpay_payment_id.slice(-8)}
                                 </p>
-                                <span className="text-xs text-slate-500 font-bold">Category: {item.category?.name}</span>
+                              )}
+                            </div>
+                          </div>
+
+                          <div>
+                            <p className="text-xs text-slate-500 font-bold uppercase mb-2">Order Status</p>
+                            <Select
+                              defaultValue={order?.status}
+                              style={{ width: 160 }}
+                              onChange={(value) => handleChange(value, order._id)}
+                              className="dark-select"
+                            >
+                              {status.map((item, index) => (
+                                <Select.Option key={index} value={item}>
+                                  {item}
+                                </Select.Option>
+                              ))}
+                            </Select>
+                          </div>
+                        </div>
+
+                        {/* Shipping Address */}
+                        <div className="mb-6 p-6 bg-slate-800/50 border-2 border-slate-800">
+                          <div className="flex items-center gap-3 mb-4 pb-4 border-b-2 border-slate-800">
+                            <MapPin className="w-5 h-5 text-indigo-400" />
+                            <h3 className="text-xl font-black text-white">Shipping Address</h3>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                              <p className="text-lg font-bold text-white">{order.shippingAddress?.name}</p>
+                              <p className="text-slate-400">{order.shippingAddress?.address}</p>
+                              <p className="text-slate-400">
+                                {order.shippingAddress?.city}, {order.shippingAddress?.state}
+                              </p>
+                              <p className="text-slate-400">PIN: {order.shippingAddress?.pincode}</p>
+                            </div>
+                            <div className="space-y-2">
+                              <div className="flex items-center gap-2">
+                                <Mail className="w-4 h-4 text-cyan-400" />
+                                <p className="text-slate-400">{order.shippingAddress?.email}</p>
                               </div>
-                              
-                              <div className="flex items-center gap-4 sm:gap-8 text-center sm:text-right">
-                                <div>
-                                  <p className="text-slate-500 uppercase font-bold text-[10px] tracking-wider mb-1">Price</p>
-                                  <p className="text-sm font-black text-cyan-400">₹{item.price}</p>
+                              <div className="flex items-center gap-2">
+                                <Phone className="w-4 h-4 text-amber-400" />
+                                <p className="text-slate-400">{order.shippingAddress?.phone}</p>
+                              </div>
+                              <p className="text-slate-400">Country: {order.shippingAddress?.country || 'India'}</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Products List */}
+                        <div className="space-y-4">
+                          {order.products?.map((item, idx) => (
+                            <div
+                              key={idx}
+                              className="flex flex-col sm:flex-row items-center sm:items-stretch border-2 border-slate-800 p-4 gap-4 hover:border-cyan-500 transition-all group bg-slate-900"
+                            >
+                              <div className="w-24 h-24 sm:w-20 sm:h-20 bg-slate-800 flex-shrink-0 flex items-center justify-center">
+                                <img
+                                  src={item.image}
+                                  alt={item.name}
+                                  className="max-w-full max-h-full object-contain p-2 group-hover:scale-105 transition-transform"
+                                />
+                              </div>
+
+                              <div className="flex-1 flex flex-col sm:flex-row justify-between items-center sm:items-center w-full gap-4">
+                                <div className="text-center sm:text-left flex-1 min-w-0">
+                                  <h4 className="font-black text-white text-base mb-1 truncate">
+                                    {item.name}
+                                  </h4>
+                                  <p className="text-sm text-slate-400 truncate mb-1">
+                                    {item.description}
+                                  </p>
+                                  <span className="text-xs text-slate-500 font-bold">Category: {item.category?.name}</span>
                                 </div>
-                                <div>
-                                  <p className="text-slate-500 uppercase font-bold text-[10px] tracking-wider mb-1">Qty</p>
-                                  <p className="text-sm font-black text-white px-2 py-0.5 bg-slate-800">{item.quantity}</p>
-                                </div>
-                                <div>
-                                  <p className="text-slate-500 uppercase font-bold text-[10px] tracking-wider mb-1">Total</p>
-                                  <p className="text-sm font-black text-emerald-400">₹{item.price * item.quantity}</p>
+                                
+                                <div className="flex items-center gap-4 sm:gap-8 text-center sm:text-right">
+                                  <div>
+                                    <p className="text-slate-500 uppercase font-bold text-[10px] tracking-wider mb-1">Price</p>
+                                    <p className="text-sm font-black text-cyan-400">₹{item.price}</p>
+                                  </div>
+                                  <div>
+                                    <p className="text-slate-500 uppercase font-bold text-[10px] tracking-wider mb-1">Qty</p>
+                                    <p className="text-sm font-black text-white px-2 py-0.5 bg-slate-800">{item.quantity}</p>
+                                  </div>
+                                  <div>
+                                    <p className="text-slate-500 uppercase font-bold text-[10px] tracking-wider mb-1">Total</p>
+                                    <p className="text-sm font-black text-emerald-400">₹{item.price * item.quantity}</p>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 ))}
               </div>
