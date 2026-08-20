@@ -43,14 +43,18 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
     });
   };
 
-  // Extract the logo SVG to a reusable variable so it can be used in header, watermark and stamp
   const FDLogo = ({ width, height, strokeWidth = 1, color = "#0ea5e9" }) => (
     <svg width={width} height={height} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M50 5 C75 5 95 25 95 50 C95 75 75 95 50 95" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" />
-      <path d="M50 5 C25 5 5 25 5 50 C5 75 25 95 50 95" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" />
-      <path d="M25 50 L40 50" stroke={color} strokeWidth={strokeWidth * 1.5} strokeLinecap="round" />
-      <path d="M25 25 L45 25" stroke={color} strokeWidth={strokeWidth * 1.5} strokeLinecap="round" />
-      <path d="M25 25 L25 75" stroke={color} strokeWidth={strokeWidth * 1.5} strokeLinecap="round" />
+      {/* Outer D curve */}
+      <path d="M 40 5 C 100 5, 100 95, 40 95" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" />
+      {/* F vertical line */}
+      <path d="M 25 15 L 25 85" stroke={color} strokeWidth={strokeWidth * 1.5} strokeLinecap="round" />
+      {/* F top horizontal */}
+      <path d="M 25 15 L 60 15" stroke={color} strokeWidth={strokeWidth * 1.5} strokeLinecap="round" />
+      {/* F middle horizontal */}
+      <path d="M 25 45 L 45 45" stroke={color} strokeWidth={strokeWidth * 1.5} strokeLinecap="round" />
+      {/* Inner decorative D line */}
+      <path d="M 35 15 C 80 15, 80 85, 35 85" stroke={color} strokeWidth={strokeWidth * 0.7} strokeLinecap="round" />
     </svg>
   );
 
@@ -82,12 +86,12 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
         <div style={{ 
           display: 'flex', 
           alignItems: 'center', 
-          backgroundColor: '#e6f0fa', 
+          background: 'linear-gradient(to right, #e8f7f4, #e6f0fa)', 
           padding: '20px 30px',
           borderBottom: '3px solid #000'
         }}>
           <div style={{ flexShrink: 0 }}>
-            <FDLogo width="80" height="80" strokeWidth="4" color="#0284c7" />
+            <FDLogo width="80" height="80" strokeWidth="4" color="#0ea5e9" />
           </div>
           
           <div style={{ marginLeft: '25px', flex: 1, display: 'flex', alignItems: 'baseline' }}>
@@ -146,11 +150,11 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
           </p>
           
           <p style={{ marginBottom: '20px' }}>
-            This is to certify that <strong>{studentName || "_________________"}</strong>, a graduate of {college || "_________________________________"} from the {courseName || "_________________"} branch{rollNo ? `, bearing Roll Number ${rollNo}` : ''}, worked as an intern at Flytium Drones Private Limited from {formatDateWithSuffix(startDate)} to {formatDateWithSuffix(endDate)}.
+            This is to certify that <strong>{studentName || "Sunny Choudhary"}</strong>, a graduate of {college || "Shri Ramswaroop Memorial College of Engineering and Management"} from the {courseName || "Computer Science and Engineering"} branch{rollNo ? `, bearing Roll Number ${rollNo}` : ''}, worked as an intern at Flytium Drones Private Limited from {formatDateWithSuffix(startDate)} to {formatDateWithSuffix(endDate)}.
           </p>
 
           <p style={{ marginBottom: '20px' }}>
-            During this period, he was an active member of our <strong>{duration || "_________________"}</strong> team, where he contributed to ongoing projects, participated in technical workshops, and collaborated closely with the team on assigned tasks and deliverables.
+            During this period, he was an active member of our <strong>{duration || "Artificial Intelligence & Machine Learning"}</strong> team, where he contributed to ongoing projects, participated in technical workshops, and collaborated closely with the team on assigned tasks and deliverables.
           </p>
 
           <p style={{ marginBottom: '20px' }}>
@@ -163,7 +167,7 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
 
           <div style={{ marginTop: '30px' }}>
             <p style={{ margin: '5px 0' }}>Issued On:- {formatDateSimple(issueDate)}</p>
-            <p style={{ margin: '5px 0' }}>Certificate ID: {certificateId || "_________"}</p>
+            <p style={{ margin: '5px 0' }}>Certificate ID: {certificateId || "FD26011"}</p>
           </div>
 
           {/* Signature Area */}
@@ -190,7 +194,7 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
                 </text>
               </svg>
               <div style={{ marginTop: '-15px' }}>
-                <FDLogo width="30" height="30" strokeWidth="6" color="#1e3a8a" />
+                <FDLogo width="30" height="30" strokeWidth="4" color="#1e3a8a" />
               </div>
               <span style={{ fontSize: '11px', color: '#1e3a8a', fontWeight: 'bold', marginTop: '10px' }}>Director</span>
             </div>
@@ -225,14 +229,14 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
           transform: 'translate(-50%, -50%)',
           pointerEvents: 'none',
           zIndex: 1,
-          opacity: 0.15
+          opacity: 0.20
         }}>
-          <FDLogo width="450" height="450" strokeWidth="1.5" color="#0284c7" />
+          <FDLogo width="650" height="650" strokeWidth="1" color="#0ea5e9" />
         </div>
 
         {/* Footer */}
         <div style={{
-          backgroundColor: '#e6f0fa',
+          background: 'linear-gradient(to right, #e8f7f4, #e6f0fa)',
           borderTop: '3px solid #000',
           padding: '15px 30px',
           textAlign: 'center',
