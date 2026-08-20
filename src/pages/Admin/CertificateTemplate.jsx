@@ -83,22 +83,21 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
       }}>
         
         {/* Header */}
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          background: 'linear-gradient(to right, #e8f7f4, #e6f0fa)', 
-          padding: '20px 30px',
-          borderBottom: '3px solid #000'
+        <div style={{
+          display: 'flex',
+          padding: '25px 30px',
+          background: 'linear-gradient(to right, #e8f7f4, #e6f0fa)',
+          borderBottom: '2px solid #000'
         }}>
-          <div style={{ flexShrink: 0 }}>
-            <FDLogo width="120" height="120" />
+          <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center' }}>
+            <FDLogo width="90" height="90" />
           </div>
           
-          <div style={{ marginLeft: '30px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <div style={{ marginLeft: '30px', flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center' }}>
             <h1 style={{ 
               margin: 0, 
-              fontSize: '40px', 
-              letterSpacing: '6px', 
+              fontSize: '44px', 
+              letterSpacing: '9px', 
               color: '#222',
               fontFamily: '"Arial Black", Impact, Arial, sans-serif',
               fontWeight: '900',
@@ -108,13 +107,12 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
               FLYTIUM DRONES
             </h1>
             <span style={{ 
-              alignSelf: 'flex-end',
-              fontSize: '16px', 
-              fontWeight: 'bold',
+              fontSize: '15px', 
+              fontWeight: '900',
               fontFamily: 'Arial, sans-serif',
               color: '#222',
-              marginRight: '5px',
-              marginTop: '5px'
+              marginTop: '5px',
+              marginRight: '2px'
             }}>
               Pvt. Ltd.
             </span>
