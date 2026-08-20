@@ -97,8 +97,8 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
           <div style={{ marginLeft: '30px', flex: 1, display: 'flex', flexDirection: 'column' }}>
             <h1 style={{ 
               margin: 0, 
-              fontSize: '46px', 
-              letterSpacing: '10px', 
+              fontSize: '40px', 
+              letterSpacing: '6px', 
               color: '#222',
               fontFamily: '"Arial Black", Impact, Arial, sans-serif',
               fontWeight: '900',
@@ -109,7 +109,7 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
             </h1>
             <span style={{ 
               alignSelf: 'flex-end',
-              fontSize: '18px', 
+              fontSize: '16px', 
               fontWeight: 'bold',
               fontFamily: 'Arial, sans-serif',
               color: '#222',
