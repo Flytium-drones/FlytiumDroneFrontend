@@ -18,20 +18,10 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
     if (!dateStr) return "___";
     const date = new Date(dateStr);
     const day = date.getDate();
-    
-    let suffix = 'th';
-    if (day % 10 === 1 && day !== 11) suffix = 'st';
-    else if (day % 10 === 2 && day !== 12) suffix = 'nd';
-    else if (day % 10 === 3 && day !== 13) suffix = 'rd';
-    
     const month = date.toLocaleDateString('en-GB', { month: 'long' });
     const year = date.getFullYear();
     
-    return (
-      <span>
-        {day}<sup>{suffix}</sup> of {month} {year}
-      </span>
-    );
+    return `${day} ${month} ${year}`;
   };
 
   const formatDateSimple = (dateStr) => {
@@ -156,7 +146,7 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
           </p>
 
           <p style={{ marginBottom: '20px' }}>
-            During this period, he was an active member of our <strong>{duration || "Artificial Intelligence & Machine Learning"}</strong> team, where he contributed to ongoing projects, participated in technical workshops, and collaborated closely with the team on assigned tasks and deliverables.
+            During this period, he was an active member of our {duration || "Artificial Intelligence & Machine Learning"} team, where he contributed to ongoing projects, participated in technical workshops, and collaborated closely with the team on assigned tasks and deliverables.
           </p>
 
           <p style={{ marginBottom: '20px' }}>
