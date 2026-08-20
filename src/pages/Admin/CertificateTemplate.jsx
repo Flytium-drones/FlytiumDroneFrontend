@@ -44,12 +44,17 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
     });
   };
 
-  const FDLogo = ({ width, height }) => (
-    <img 
-      src="/fd-logo.png" 
-      alt="FD Logo" 
-      style={{ width: `${width}px`, height: `${height}px`, objectFit: 'contain' }} 
-    />
+  const FDLogo = ({ width, height, color = "#0099ff" }) => (
+    <svg width={width} height={height} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* D Curve */}
+      <path d="M 42 8 C 100 8, 100 92, 45 92 C 85 85, 85 15, 42 8 Z" fill={color} />
+      {/* F Vertical Bar */}
+      <polygon points="30,20 30,85 38,75 38,20" fill={color} />
+      {/* F Top Bar */}
+      <polygon points="30,20 70,20 67,26 30,26" fill={color} />
+      {/* F Middle Bar */}
+      <polygon points="30,46 58,46 55,52 30,52" fill={color} />
+    </svg>
   );
 
   return (
