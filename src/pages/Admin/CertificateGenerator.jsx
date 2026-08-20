@@ -13,6 +13,7 @@ const CertificateGenerator = () => {
     certificateId: "",
     studentName: "",
     rollNo: "",
+    year: "",
     courseName: "",
     college: "",
     duration: "",
@@ -41,7 +42,7 @@ const CertificateGenerator = () => {
   const handleGenerateAndSubmit = async (e) => {
     e.preventDefault();
     
-    const requiredFields = ['certificateId', 'studentName', 'rollNo', 'courseName', 'college', 'duration', 'startDate', 'endDate', 'issueDate'];
+    const requiredFields = ['certificateId', 'studentName', 'courseName', 'college', 'duration', 'startDate', 'endDate', 'issueDate'];
     for (const field of requiredFields) {
       if (!formData[field]) {
         toast.error(`Please fill out ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}`);
@@ -106,6 +107,7 @@ const CertificateGenerator = () => {
           certificateId: "",
           studentName: "",
           rollNo: "",
+          year: "",
           courseName: "",
           college: "",
           duration: "",
@@ -195,6 +197,13 @@ const CertificateGenerator = () => {
                     <input type="text" name="rollNo"
                       className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-sm"
                       placeholder="e.g. 2024041338 (Optional)" value={formData.rollNo} onChange={handleChange} />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1.5">Year / Semester</label>
+                    <input type="text" name="year"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-sm"
+                      placeholder="e.g. 2nd Year (Optional)" value={formData.year} onChange={handleChange} />
                   </div>
   
                   <div>

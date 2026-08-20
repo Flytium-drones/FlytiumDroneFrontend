@@ -4,6 +4,7 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
   const {
     studentName,
     rollNo,
+    year: studentYear,
     courseName,
     college,
     duration,
@@ -150,7 +151,7 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
           </p>
           
           <p style={{ marginBottom: '20px' }}>
-            This is to certify that <strong>{studentName || "Sunny Choudhary"}</strong>, a graduate of {college || "Shri Ramswaroop Memorial College of Engineering and Management"} from the {courseName || "Computer Science and Engineering"} branch{rollNo ? `, bearing Roll Number ${rollNo}` : ''}, worked as an intern at Flytium Drones Private Limited from {formatDateWithSuffix(startDate)} to {formatDateWithSuffix(endDate)}.
+            This is to certify that <strong>{studentName || "Sunny Choudhary"}</strong>, a graduate of {college || "Shri Ramswaroop Memorial College of Engineering and Management"} from the {courseName || "Computer Science and Engineering"} branch{studentYear ? `, ${studentYear}` : ''}{rollNo ? `, bearing Roll Number ${rollNo}` : ''}, worked as an intern at Flytium Drones Private Limited from {formatDateWithSuffix(startDate)} to {formatDateWithSuffix(endDate)}.
           </p>
 
           <p style={{ marginBottom: '20px' }}>
