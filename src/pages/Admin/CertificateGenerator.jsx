@@ -5,7 +5,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { API_URL } from "../../api";
 import { useAuth } from "../../Context/auth";
-import { Cpu } from "lucide-react";
+import { Cpu, Image as ImageIcon } from "lucide-react";
 import CertificateTemplate from './CertificateTemplate';
 
 const CertificateGenerator = () => {
@@ -21,12 +21,21 @@ const CertificateGenerator = () => {
     issueDate: "",
   });
   const [isGenerating, setIsGenerating] = useState(false);
+  const [sampleImage, setSampleImage] = useState(null);
   
   const { auth } = useAuth();
   const certificateRef = useRef(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSampleUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setSampleImage(url);
+    }
   };
 
   const handleGenerateAndSubmit = async (e) => {
@@ -138,10 +147,32 @@ const CertificateGenerator = () => {
             
             {/* Form Column */}
             <div className="lg:w-1/2 bg-slate-950 rounded-xl border border-slate-800 p-6 shadow-xl overflow-y-auto custom-scrollbar">
-              <h2 className="text-lg font-bold text-white mb-6 flex items-center">
-                <span className="bg-indigo-500/20 text-indigo-400 p-1.5 rounded-lg mr-2">1</span>
-                Enter Details
-              </h2>
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-lg font-bold text-white flex items-center">
+                  <span className="bg-indigo-500/20 text-indigo-400 p-1.5 rounded-lg mr-2">1</span>
+                  Enter Details
+                </h2>
+                
+                <label className="cursor-pointer bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-md text-xs font-semibold flex items-center transition-colors">
+                  <ImageIcon className="w-4 h-4 mr-1.5" />
+                  Load Sample
+                  <input type="file" accept="image/*" onChange={handleSampleUpload} className="hidden" />
+                </label>
+              </div>
+
+              {/* Sample Viewer */}
+              {sampleImage && (
+                <div className="mb-6 border border-slate-700 rounded-lg p-2 bg-slate-900 relative">
+                  <button 
+                    onClick={() => setSampleImage(null)}
+                    className="absolute top-4 right-4 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs shadow-lg"
+                  >
+                    ✕
+                  </button>
+                  <p className="text-xs text-slate-400 mb-2 font-semibold">Reference Sample Image:</p>
+                  <img src={sampleImage} alt="Sample" className="w-full rounded border border-slate-800" />
+                </div>
+              )}
               
               <form onSubmit={handleGenerateAndSubmit} className="space-y-5">
                 <div className="grid grid-cols-1 gap-5">
