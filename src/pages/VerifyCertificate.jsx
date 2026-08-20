@@ -112,12 +112,12 @@ const VerifyCertificate = () => {
                         <dd className="mt-1 text-lg font-semibold text-gray-900">{cert.certificateId}</dd>
                       </div>
                       <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">Branch</dt>
+                        <dt className="text-sm font-medium text-gray-500">Course / Program</dt>
                         <dd className="mt-1 text-lg font-semibold text-gray-900">{cert.courseName}</dd>
                       </div>
                       <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">Course / Program</dt>
-                        <dd className="mt-1 text-lg font-semibold text-gray-900">{cert.duration}</dd>
+                        <dt className="text-sm font-medium text-gray-500">Roll Number</dt>
+                        <dd className="mt-1 text-lg font-semibold text-gray-900">{cert.rollNo || "N/A"}</dd>
                       </div>
                       <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Issue Date</dt>
