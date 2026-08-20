@@ -1,23 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Layout from "../../components/Layout/Layout";
 import AdminMenu from "../../components/Layout/AdminMenu";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { API_URL } from "../../api";
 import { useAuth } from "../../Context/auth";
-import { Search, Plus, Trash2, FileText, UploadCloud, CheckCircle, Award, Download } from "lucide-react";
+import { Search, Plus, Trash2, FileText, UploadCloud, CheckCircle, Award, Download, Cpu } from "lucide-react";
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
+import CertificateTemplate from './CertificateTemplate';
 
 const ManageCertificates = () => {
   const [certificates, setCertificates] = useState([]);
-  const [certificateId, setCertificateId] = useState("");
-  const [studentName, setStudentName] = useState("");
-  const [courseName, setCourseName] = useState("");
-  const [issueDate, setIssueDate] = useState("");
-  const [pdfUrl, setPdfUrl] = useState("");
-  const [isUploading, setIsUploading] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    certificateId: "",
+    studentName: "",
+    rollNo: "",
+    courseName: "",
+    college: "",
+    duration: "",
+    startDate: "",
+    endDate: "",
+    issueDate: "",
+  });
+  const [isGenerating, setIsGenerating] = useState(false);
   
   const { auth } = useAuth();
+  const certificateRef = useRef(null);
 
   // Get all certificates
   const getAllCertificates = async () => {
@@ -40,79 +49,87 @@ const ManageCertificates = () => {
     }
   }, [auth?.token]);
 
-  // Handle PDF Upload to Cloudinary
-  const handlePdfUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    if (file.type !== "application/pdf") {
-      toast.error("Please upload a PDF file");
-      return;
-    }
-
-    try {
-      setIsUploading(true);
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", "flytium");
-      formData.append("cloud_name", "dhkpwi9ga");
-
-      const response = await fetch(
-        "https://api.cloudinary.com/v1_1/dhkpwi9ga/auto/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const data = await response.json();
-      setPdfUrl(data.secure_url);
-      toast.success("PDF uploaded successfully");
-    } catch (error) {
-      console.error("Error uploading PDF:", error);
-      toast.error("Failed to upload PDF");
-    } finally {
-      setIsUploading(false);
-    }
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
+  // Handle form submission and generation
+  const handleGenerateAndSubmit = async (e) => {
     e.preventDefault();
-    if (!pdfUrl) {
-      toast.error("Please upload the PDF certificate first");
-      return;
+    
+    // Quick validation
+    const requiredFields = ['certificateId', 'studentName', 'rollNo', 'courseName', 'college', 'duration', 'startDate', 'endDate', 'issueDate'];
+    for (const field of requiredFields) {
+      if (!formData[field]) {
+        toast.error(`Please fill out ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}`);
+        return;
+      }
     }
 
     try {
-      setIsSubmitting(true);
+      setIsGenerating(true);
+      toast.loading("Generating PDF...", { id: "generate" });
+
+      const element = certificateRef.current;
+      const canvas = await html2canvas(element, { 
+        scale: 2, 
+        useCORS: true,
+        logging: false
+      });
+      const imgData = canvas.toDataURL('image/png');
+      
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      
+      const pdfBlob = pdf.output('blob');
+      
+      toast.loading("Uploading to cloud...", { id: "generate" });
+      const cloudinaryFormData = new FormData();
+      cloudinaryFormData.append("file", pdfBlob, `${formData.certificateId}.pdf`);
+      cloudinaryFormData.append("upload_preset", "flytium");
+      cloudinaryFormData.append("cloud_name", "dhkpwi9ga");
+
+      const uploadRes = await fetch("https://api.cloudinary.com/v1_1/dhkpwi9ga/auto/upload", {
+        method: "POST",
+        body: cloudinaryFormData,
+      });
+      
+      const uploadData = await uploadRes.json();
+      const pdfUrl = uploadData.secure_url;
+      
+      toast.loading("Saving to database...", { id: "generate" });
       const { data } = await axios.post(`${API_URL}/api/certificate/create`, {
-        certificateId,
-        studentName,
-        courseName,
-        issueDate,
+        ...formData,
         pdfUrl
       }, {
         headers: { Authorization: `Bearer ${auth?.token}` }
       });
       
       if (data?.success) {
-        toast.success(`Certificate ${certificateId} created`);
+        toast.success(`Certificate ${formData.certificateId} created successfully!`, { id: "generate" });
         getAllCertificates();
         // Clear form
-        setCertificateId("");
-        setStudentName("");
-        setCourseName("");
-        setIssueDate("");
-        setPdfUrl("");
+        setFormData({
+          certificateId: "",
+          studentName: "",
+          rollNo: "",
+          courseName: "",
+          college: "",
+          duration: "",
+          startDate: "",
+          endDate: "",
+          issueDate: "",
+        });
       } else {
-        toast.error(data.message);
+        toast.error(data.message, { id: "generate" });
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.response?.data?.message || "Something went wrong");
+      toast.error(error.response?.data?.message || "Failed to generate certificate", { id: "generate" });
     } finally {
-      setIsSubmitting(false);
+      setIsGenerating(false);
     }
   };
 
@@ -157,101 +174,83 @@ const ManageCertificates = () => {
             
             {/* Create Form */}
             <div className="lg:col-span-1">
-              <div className="bg-slate-950 rounded-xl border border-slate-800 p-6 sticky top-28 shadow-xl">
-                <h2 className="text-xl font-bold text-white mb-6 flex items-center">
-                  <Plus className="mr-2 w-5 h-5 text-emerald-400" />
-                  Add New Certificate
+              <div className="bg-slate-950 rounded-xl border border-slate-800 p-6 sticky top-28 shadow-xl max-h-[85vh] overflow-y-auto custom-scrollbar">
+                <h2 className="text-xl font-bold text-white mb-6 flex items-center sticky top-0 bg-slate-950 py-2 z-10 border-b border-slate-800">
+                  <Cpu className="mr-2 w-5 h-5 text-emerald-400" />
+                  Certificate Generator
                 </h2>
 
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form onSubmit={handleGenerateAndSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-sm font-semibold text-slate-400 mb-2">Certificate ID *</label>
-                    <input
-                      type="text"
-                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
-                      placeholder="e.g. FLY-2024-001"
-                      value={certificateId}
-                      onChange={(e) => setCertificateId(e.target.value)}
-                      required
-                    />
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">Certificate ID *</label>
+                    <input type="text" name="certificateId"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                      placeholder="e.g. FD26006" value={formData.certificateId} onChange={handleChange} required />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-semibold text-slate-400 mb-2">Student Name *</label>
-                    <input
-                      type="text"
-                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
-                      placeholder="e.g. Rahul Sharma"
-                      value={studentName}
-                      onChange={(e) => setStudentName(e.target.value)}
-                      required
-                    />
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">Student Name *</label>
+                    <input type="text" name="studentName"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                      placeholder="e.g. Prakhar Tiwari" value={formData.studentName} onChange={handleChange} required />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-slate-400 mb-2">Course Name *</label>
-                    <input
-                      type="text"
-                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
-                      placeholder="e.g. Advanced Drone Piloting"
-                      value={courseName}
-                      onChange={(e) => setCourseName(e.target.value)}
-                      required
-                    />
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">Roll Number *</label>
+                    <input type="text" name="rollNo"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                      placeholder="e.g. 2024041338" value={formData.rollNo} onChange={handleChange} required />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-slate-400 mb-2">Issue Date *</label>
-                    <input
-                      type="date"
-                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors [color-scheme:dark]"
-                      value={issueDate}
-                      onChange={(e) => setIssueDate(e.target.value)}
-                      required
-                    />
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">College/University *</label>
+                    <input type="text" name="college"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                      placeholder="e.g. Madan Mohan Malaviya University Of Technology" value={formData.college} onChange={handleChange} required />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-slate-400 mb-2">Upload PDF Document *</label>
-                    <div className="relative">
-                      <input
-                        type="file"
-                        accept=".pdf"
-                        className="hidden"
-                        id="pdf-upload"
-                        onChange={handlePdfUpload}
-                        disabled={isUploading}
-                      />
-                      <label 
-                        htmlFor="pdf-upload" 
-                        className={`flex items-center justify-center w-full px-4 py-3 rounded-lg border-2 border-dashed cursor-pointer transition-colors ${pdfUrl ? 'border-emerald-500/50 bg-emerald-500/5 hover:bg-emerald-500/10' : 'border-slate-700 hover:border-indigo-500 hover:bg-indigo-500/5'}`}
-                      >
-                        {isUploading ? (
-                          <span className="flex items-center text-indigo-400">
-                            <UploadCloud className="animate-bounce w-5 h-5 mr-2" />
-                            Uploading...
-                          </span>
-                        ) : pdfUrl ? (
-                          <span className="flex items-center text-emerald-400 font-medium">
-                            <CheckCircle className="w-5 h-5 mr-2" />
-                            PDF Ready
-                          </span>
-                        ) : (
-                          <span className="flex items-center text-slate-400">
-                            <UploadCloud className="w-5 h-5 mr-2" />
-                            Select PDF File
-                          </span>
-                        )}
-                      </label>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">Course Details *</label>
+                    <input type="text" name="courseName"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                      placeholder="e.g. Electronics and communication (IOT), Btech 2nd yr" value={formData.courseName} onChange={handleChange} required />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">Duration Text *</label>
+                    <input type="text" name="duration"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                      placeholder="e.g. Six-week" value={formData.duration} onChange={handleChange} required />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-400 mb-1">Start Date *</label>
+                      <input type="date" name="startDate"
+                        className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 [color-scheme:dark]"
+                        value={formData.startDate} onChange={handleChange} required />
                     </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-400 mb-1">End Date *</label>
+                      <input type="date" name="endDate"
+                        className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 [color-scheme:dark]"
+                        value={formData.endDate} onChange={handleChange} required />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">Issue Date *</label>
+                    <input type="date" name="issueDate"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 [color-scheme:dark]"
+                      value={formData.issueDate} onChange={handleChange} required />
                   </div>
                   
                   <button 
                     type="submit" 
-                    disabled={isUploading || isSubmitting}
-                    className="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold py-3.5 px-4 rounded-lg transition-all transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg shadow-indigo-500/25 flex justify-center items-center mt-6 disabled:opacity-70 disabled:cursor-not-allowed"
+                    disabled={isGenerating}
+                    className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-3 px-4 rounded-lg transition-all transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg shadow-emerald-500/25 flex justify-center items-center mt-6 disabled:opacity-70 disabled:cursor-not-allowed"
                   >
-                    {isSubmitting ? "CREATING..." : "GENERATE CERTIFICATE"}
+                    {isGenerating ? "GENERATING & SAVING..." : "GENERATE CERTIFICATE"}
                   </button>
                 </form>
               </div>
@@ -324,7 +323,7 @@ const ManageCertificates = () => {
                             <div className="flex flex-col items-center justify-center">
                               <Award className="w-12 h-12 text-slate-700 mb-3" />
                               <p className="text-lg font-medium text-slate-400">No certificates found</p>
-                              <p className="text-sm">Create your first certificate using the form.</p>
+                              <p className="text-sm">Create your first certificate using the generator.</p>
                             </div>
                           </td>
                         </tr>
@@ -338,6 +337,12 @@ const ManageCertificates = () => {
           </div>
         </div>
       </div>
+      
+      {/* Hidden Certificate Template for PDF Generation */}
+      <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
+        <CertificateTemplate ref={certificateRef} data={formData} />
+      </div>
+      
     </Layout>
   );
 };
