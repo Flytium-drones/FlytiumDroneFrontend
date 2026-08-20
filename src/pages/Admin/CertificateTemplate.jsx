@@ -44,17 +44,18 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
     });
   };
 
-  const FDLogo = ({ width, height, color = "#0099ff" }) => (
-    <svg width={width} height={height} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* D Curve */}
-      <path d="M 42 8 C 100 8, 100 92, 45 92 C 85 85, 85 15, 42 8 Z" fill={color} />
-      {/* F Vertical Bar */}
-      <polygon points="30,20 30,85 38,75 38,20" fill={color} />
-      {/* F Top Bar */}
-      <polygon points="30,20 70,20 67,26 30,26" fill={color} />
-      {/* F Middle Bar */}
-      <polygon points="30,46 58,46 55,52 30,52" fill={color} />
-    </svg>
+  const FDLogo = ({ width, height, style = {} }) => (
+    <img 
+      src="/fd-logo-transparent.png" 
+      alt="FD Logo" 
+      style={{ 
+        width: `${width}px`, 
+        height: `${height}px`, 
+        objectFit: 'contain',
+        mixBlendMode: 'multiply',
+        ...style 
+      }} 
+    />
   );
 
   return (
@@ -90,7 +91,7 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
           borderBottom: '3px solid #000'
         }}>
           <div style={{ flexShrink: 0 }}>
-            <FDLogo width="80" height="80" color="#0ea5e9" />
+            <FDLogo width="120" height="120" />
           </div>
           
           <div style={{ marginLeft: '30px', flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -197,7 +198,7 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
           zIndex: 1,
           opacity: 0.15
         }}>
-          <FDLogo width="650" height="650" color="#0ea5e9" />
+          <FDLogo width="1100" height="1100" />
         </div>
 
         {/* Footer */}
