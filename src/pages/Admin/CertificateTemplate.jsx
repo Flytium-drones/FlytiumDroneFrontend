@@ -169,53 +169,16 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
           </div>
 
           {/* Signature Area */}
-          <div style={{ marginTop: '50px', position: 'relative' }}>
-            {/* Stamp */}
-            <div style={{
-              width: '120px',
-              height: '120px',
-              border: '2px solid #1e3a8a',
-              borderRadius: '50%',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              position: 'absolute',
-              left: '0',
-              top: '-30px',
-              opacity: 0.85
-            }}>
-              <svg width="116" height="116" viewBox="0 0 120 120" style={{ position: 'absolute', top: 0, left: 0 }}>
-                <path id="curve" d="M 15 60 A 45 45 0 1 1 105 60 A 45 45 0 1 1 15 60" fill="transparent" />
-                <text fill="#1e3a8a" fontSize="11" fontWeight="bold" letterSpacing="1">
-                  <textPath href="#curve" startOffset="10%">FLYTIUM DRONES PVT. LTD.</textPath>
-                </text>
-              </svg>
-              <div style={{ marginTop: '-15px' }}>
-                <FDLogo width="30" height="30" color="#1e3a8a" />
-              </div>
-              <span style={{ fontSize: '11px', color: '#1e3a8a', fontWeight: 'bold', marginTop: '10px' }}>Director</span>
-            </div>
-
-            {/* Signature overlay */}
-            <div style={{ 
-              position: 'absolute',
-              left: '20px',
-              top: '15px',
-              fontFamily: "'Brush Script MT', 'Caveat', cursive",
-              fontSize: '44px',
-              color: '#1e3a8a',
-              transform: 'rotate(-5deg)',
-              zIndex: 10
-            }}>
-              Ankit Kumar
-            </div>
-
-            <div style={{ marginTop: '80px', marginLeft: '10px' }}>
-              <p style={{ margin: 0, fontSize: '17px', color: '#333' }}>Ankit Kumar</p>
-              <p style={{ margin: 0, fontSize: '17px', color: '#333' }}>Founder and CEO</p>
-              <p style={{ margin: 0, fontSize: '17px', color: '#333' }}>Flytium-Drones Pvt. Ltd.</p>
-            </div>
+          <div style={{ marginTop: '30px', marginLeft: '-20px', position: 'relative' }}>
+            <img 
+              src="/signature-block.png" 
+              alt="Signature and Stamp" 
+              style={{ 
+                width: '320px', 
+                height: 'auto',
+                mixBlendMode: 'multiply'
+              }} 
+            />
           </div>
         </div>
 
