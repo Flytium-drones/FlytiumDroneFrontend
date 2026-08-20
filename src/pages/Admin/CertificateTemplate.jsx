@@ -44,17 +44,12 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
     });
   };
 
-  const FDLogo = ({ width, height, color = "#0099ff" }) => (
-    <svg width={width} height={height} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* D Curve */}
-      <path d="M 42 8 C 100 8, 100 92, 45 92 C 85 85, 85 15, 42 8 Z" fill={color} />
-      {/* F Vertical Bar */}
-      <polygon points="30,20 30,85 38,75 38,20" fill={color} />
-      {/* F Top Bar */}
-      <polygon points="30,20 70,20 67,26 30,26" fill={color} />
-      {/* F Middle Bar */}
-      <polygon points="30,46 58,46 55,52 30,52" fill={color} />
-    </svg>
+  const FDLogo = ({ width, height }) => (
+    <img 
+      src="/fd-logo-transparent.png" 
+      alt="FD Logo" 
+      style={{ width: `${width}px`, height: `${height}px`, objectFit: 'contain' }} 
+    />
   );
 
   return (
@@ -93,23 +88,26 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
             <FDLogo width="80" height="80" color="#0ea5e9" />
           </div>
           
-          <div style={{ marginLeft: '25px', flex: 1, display: 'flex', alignItems: 'baseline' }}>
+          <div style={{ marginLeft: '30px', flex: 1, display: 'flex', flexDirection: 'column' }}>
             <h1 style={{ 
               margin: 0, 
-              fontSize: '48px', 
-              letterSpacing: '12px', 
-              color: '#333',
-              fontFamily: 'Arial, sans-serif',
-              fontWeight: '900'
+              fontSize: '52px', 
+              letterSpacing: '14px', 
+              color: '#222',
+              fontFamily: '"Arial Black", Impact, Arial, sans-serif',
+              fontWeight: '900',
+              lineHeight: '1'
             }}>
               FLYTIUM DRONES
             </h1>
             <span style={{ 
-              marginLeft: 'auto',
+              alignSelf: 'flex-end',
               fontSize: '18px', 
               fontWeight: 'bold',
               fontFamily: 'Arial, sans-serif',
-              color: '#333'
+              color: '#222',
+              marginRight: '5px',
+              marginTop: '5px'
             }}>
               Pvt. Ltd.
             </span>
