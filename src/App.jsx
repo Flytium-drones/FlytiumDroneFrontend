@@ -45,6 +45,7 @@ import JobApplications from "./pages/Admin/JobApplications";
 import ManageContacts from "./pages/Admin/ManageContacts";
 import ManageStoreHero from "./pages/Admin/ManageStoreHero";
 import ManageCertificates from "./pages/Admin/ManageCertificates";
+import CertificateGenerator from "./pages/Admin/CertificateGenerator";
 import VerifyCertificate from "./pages/VerifyCertificate";
 import { LenisProvider } from "./components/LenisProvider";
 import ScrollToTop from "./components/ScrollToTop";
@@ -88,6 +89,7 @@ const AppContent = () => {
           <Route path="admin/jobs" element={<ManageJobs />} />
           <Route path="admin/job-applications" element={<JobApplications />} />
           <Route path="admin/contacts" element={<ManageContacts />} />
+          <Route path="admin/certificate-generator" element={<CertificateGenerator />} />
           <Route path="admin/certificates" element={<ManageCertificates />} />
         </Route>
 

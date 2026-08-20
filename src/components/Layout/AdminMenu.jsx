@@ -25,6 +25,7 @@ const AdminMenu = () => {
     { to: "/dashboard/admin/orders", icon: ShoppingCart, label: "Orders" },
     { to: "/dashboard/admin/jobs", icon: Briefcase, label: "Manage Jobs" },
     { to: "/dashboard/admin/job-applications", icon: FileText, label: "Job Applications" },
+    { to: "/dashboard/admin/certificate-generator", icon: FileText, label: "Certificate Generator" },
     { to: "/dashboard/admin/certificates", icon: FileText, label: "Manage Certificates" },
     { to: "/dashboard/admin/contacts", icon: Mail, label: "Contact Submissions" },
     { to: "/dashboard/admin/users", icon: Users, label: "Users" },
