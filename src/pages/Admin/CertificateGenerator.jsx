@@ -61,22 +61,32 @@ const CertificateGenerator = () => {
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       
       const pdfBlob = pdf.output('blob');
-      const pdfFile = new File([pdfBlob], `${formData.certificateId}.pdf`, { type: 'application/pdf' });
       
-      toast.loading("Saving to database...", { id: "generate" });
-      
-      // Create FormData to send to backend which requires a 'pdf' file
-      const submitData = new FormData();
-      Object.keys(formData).forEach(key => {
-        submitData.append(key, formData[key]);
-      });
-      submitData.append('pdf', pdfFile);
+      toast.loading("Uploading to cloud...", { id: "generate" });
+      const cloudinaryFormData = new FormData();
+      cloudinaryFormData.append("file", pdfBlob, `${formData.certificateId}.pdf`);
+      cloudinaryFormData.append("upload_preset", "flytium");
+      cloudinaryFormData.append("cloud_name", "dhkpwi9ga");
 
-      const { data } = await axios.post(`${API_URL}/api/certificate/create`, submitData, {
-        headers: { 
-          Authorization: `Bearer ${auth?.token}`,
-          'Content-Type': 'multipart/form-data'
-        }
+      const uploadRes = await fetch("https://api.cloudinary.com/v1_1/dhkpwi9ga/auto/upload", {
+        method: "POST",
+        body: cloudinaryFormData,
+      });
+      
+      const uploadData = await uploadRes.json();
+      const pdfUrl = uploadData.secure_url;
+      
+      if (!pdfUrl) {
+        throw new Error("Cloudinary upload failed");
+      }
+
+      toast.loading("Saving to database...", { id: "generate" });
+      const { data } = await axios.post(`${API_URL}/api/certificate/create`, {
+        ...formData,
+        pdfUrl: pdfUrl,
+        pdf: pdfUrl
+      }, {
+        headers: { Authorization: `Bearer ${auth?.token}` }
       });
       
       if (data?.success) {
@@ -97,7 +107,8 @@ const CertificateGenerator = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.response?.data?.message || "Failed to generate certificate", { id: "generate" });
+      const errorMsg = error.response?.data?.message || error.message || "Failed to generate certificate";
+      toast.error(errorMsg, { id: "generate" });
     } finally {
       setIsGenerating(false);
     }
