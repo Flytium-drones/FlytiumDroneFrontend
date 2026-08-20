@@ -61,27 +61,22 @@ const CertificateGenerator = () => {
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       
       const pdfBlob = pdf.output('blob');
-      
-      toast.loading("Uploading to cloud...", { id: "generate" });
-      const cloudinaryFormData = new FormData();
-      cloudinaryFormData.append("file", pdfBlob, `${formData.certificateId}.pdf`);
-      cloudinaryFormData.append("upload_preset", "flytium");
-      cloudinaryFormData.append("cloud_name", "dhkpwi9ga");
-
-      const uploadRes = await fetch("https://api.cloudinary.com/v1_1/dhkpwi9ga/auto/upload", {
-        method: "POST",
-        body: cloudinaryFormData,
-      });
-      
-      const uploadData = await uploadRes.json();
-      const pdfUrl = uploadData.secure_url;
+      const pdfFile = new File([pdfBlob], `${formData.certificateId}.pdf`, { type: 'application/pdf' });
       
       toast.loading("Saving to database...", { id: "generate" });
-      const { data } = await axios.post(`${API_URL}/api/certificate/create`, {
-        ...formData,
-        pdfUrl
-      }, {
-        headers: { Authorization: `Bearer ${auth?.token}` }
+      
+      // Create FormData to send to backend which requires a 'pdf' file
+      const submitData = new FormData();
+      Object.keys(formData).forEach(key => {
+        submitData.append(key, formData[key]);
+      });
+      submitData.append('pdf', pdfFile);
+
+      const { data } = await axios.post(`${API_URL}/api/certificate/create`, submitData, {
+        headers: { 
+          Authorization: `Bearer ${auth?.token}`,
+          'Content-Type': 'multipart/form-data'
+        }
       });
       
       if (data?.success) {
