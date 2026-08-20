@@ -169,12 +169,12 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
           </div>
 
           {/* Signature Area */}
-          <div style={{ marginTop: '30px', marginLeft: '-20px', position: 'relative' }}>
+          <div style={{ marginTop: '5px', marginLeft: '-15px', position: 'relative' }}>
             <img 
               src="/signature-block.png" 
               alt="Signature and Stamp" 
               style={{ 
-                width: '320px', 
+                width: '210px', 
                 height: 'auto',
                 mixBlendMode: 'multiply'
               }} 
