@@ -44,18 +44,16 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
     });
   };
 
-  const FDLogo = ({ width, height, strokeWidth = 1, color = "#0ea5e9" }) => (
+  const FDLogo = ({ width, height, color = "#0099ff" }) => (
     <svg width={width} height={height} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Outer D curve */}
-      <path d="M 40 5 C 100 5, 100 95, 40 95" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" />
-      {/* F vertical line */}
-      <path d="M 25 15 L 25 85" stroke={color} strokeWidth={strokeWidth * 1.5} strokeLinecap="round" />
-      {/* F top horizontal */}
-      <path d="M 25 15 L 60 15" stroke={color} strokeWidth={strokeWidth * 1.5} strokeLinecap="round" />
-      {/* F middle horizontal */}
-      <path d="M 25 45 L 45 45" stroke={color} strokeWidth={strokeWidth * 1.5} strokeLinecap="round" />
-      {/* Inner decorative D line */}
-      <path d="M 35 15 C 80 15, 80 85, 35 85" stroke={color} strokeWidth={strokeWidth * 0.7} strokeLinecap="round" />
+      {/* D Curve */}
+      <path d="M 42 8 C 100 8, 100 92, 45 92 C 85 85, 85 15, 42 8 Z" fill={color} />
+      {/* F Vertical Bar */}
+      <polygon points="30,20 30,85 38,75 38,20" fill={color} />
+      {/* F Top Bar */}
+      <polygon points="30,20 70,20 67,26 30,26" fill={color} />
+      {/* F Middle Bar */}
+      <polygon points="30,46 58,46 55,52 30,52" fill={color} />
     </svg>
   );
 
@@ -92,7 +90,7 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
           borderBottom: '3px solid #000'
         }}>
           <div style={{ flexShrink: 0 }}>
-            <FDLogo width="80" height="80" strokeWidth="4" color="#0ea5e9" />
+            <FDLogo width="80" height="80" color="#0ea5e9" />
           </div>
           
           <div style={{ marginLeft: '25px', flex: 1, display: 'flex', alignItems: 'baseline' }}>
@@ -195,7 +193,7 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
                 </text>
               </svg>
               <div style={{ marginTop: '-15px' }}>
-                <FDLogo width="30" height="30" strokeWidth="4" color="#1e3a8a" />
+                <FDLogo width="30" height="30" color="#1e3a8a" />
               </div>
               <span style={{ fontSize: '11px', color: '#1e3a8a', fontWeight: 'bold', marginTop: '10px' }}>Director</span>
             </div>
@@ -232,7 +230,7 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
           zIndex: 1,
           opacity: 0.20
         }}>
-          <FDLogo width="650" height="650" strokeWidth="1" color="#0ea5e9" />
+          <FDLogo width="650" height="650" color="#0ea5e9" />
         </div>
 
         {/* Footer */}
