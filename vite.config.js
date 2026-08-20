@@ -7,6 +7,7 @@ export default defineConfig({
 
   // Build optimization for SEO and performance
   build: {
+    target: "es2020",
     outDir: "dist",
     sourcemap: false, // Disable source maps in production
     minify: "terser",

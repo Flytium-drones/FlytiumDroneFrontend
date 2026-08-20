@@ -6,8 +6,6 @@ import toast from "react-hot-toast";
 import { API_URL } from "../../api";
 import { useAuth } from "../../Context/auth";
 import { Cpu } from "lucide-react";
-import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
 import CertificateTemplate from './CertificateTemplate';
 
 const CertificateGenerator = () => {
@@ -45,6 +43,9 @@ const CertificateGenerator = () => {
     try {
       setIsGenerating(true);
       toast.loading("Generating PDF...", { id: "generate" });
+
+      const html2canvas = window.html2canvas;
+      const { jsPDF } = window.jspdf;
 
       const element = certificateRef.current;
       const canvas = await html2canvas(element, { 
