@@ -192,7 +192,7 @@ const CertificateGenerator = () => {
                   </div>
   
                   <div>
-                    <label className="block text-xs font-semibold text-slate-400 mb-1.5">Team / Department Name *</label>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1.5">Course / Program *</label>
                     <input type="text" name="duration"
                       className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-sm"
                       placeholder="e.g. Artificial Intelligence & Machine Learning" value={formData.duration} onChange={handleChange} required />
