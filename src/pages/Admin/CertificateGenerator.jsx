@@ -119,92 +119,132 @@ const CertificateGenerator = () => {
   return (
     <Layout title={"Dashboard - Certificate Generator"}>
       <div className="bg-slate-900 min-h-screen text-slate-300 flex">
-        <div className="w-1/4">
+        <div className="w-[20%] xl:w-1/5 shrink-0">
           <AdminMenu />
         </div>
-        <div className="w-3/4 p-8">
+        
+        {/* Main Content Area */}
+        <div className="w-[80%] xl:w-4/5 p-6 flex flex-col h-screen overflow-hidden">
           
-          <div className="flex items-center justify-between mb-8 border-b border-slate-800 pb-4">
-            <h1 className="text-3xl font-black text-white flex items-center">
+          <div className="flex items-center justify-between mb-4 border-b border-slate-800 pb-4 shrink-0">
+            <h1 className="text-2xl font-black text-white flex items-center">
               <Cpu className="mr-3 text-emerald-500 w-8 h-8" /> 
               Certificate Generator
             </h1>
           </div>
 
-          <div className="bg-slate-950 rounded-xl border border-slate-800 p-8 shadow-xl max-w-3xl mx-auto">
-            <form onSubmit={handleGenerateAndSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-slate-400 mb-2">Certificate ID *</label>
-                  <input type="text" name="certificateId"
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                    placeholder="e.g. FD26006" value={formData.certificateId} onChange={handleChange} required />
+          {/* Form and Preview Split */}
+          <div className="flex flex-col lg:flex-row gap-6 flex-1 overflow-hidden">
+            
+            {/* Form Column */}
+            <div className="lg:w-1/2 bg-slate-950 rounded-xl border border-slate-800 p-6 shadow-xl overflow-y-auto custom-scrollbar">
+              <h2 className="text-lg font-bold text-white mb-6 flex items-center">
+                <span className="bg-indigo-500/20 text-indigo-400 p-1.5 rounded-lg mr-2">1</span>
+                Enter Details
+              </h2>
+              
+              <form onSubmit={handleGenerateAndSubmit} className="space-y-5">
+                <div className="grid grid-cols-1 gap-5">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1.5">Certificate ID *</label>
+                    <input type="text" name="certificateId"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-sm"
+                      placeholder="e.g. FD26011" value={formData.certificateId} onChange={handleChange} required />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1.5">Student Name *</label>
+                    <input type="text" name="studentName"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-sm"
+                      placeholder="e.g. Sunny Choudhary" value={formData.studentName} onChange={handleChange} required />
+                  </div>
+  
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1.5">Roll Number</label>
+                    <input type="text" name="rollNo"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-sm"
+                      placeholder="e.g. 2024041338 (Optional)" value={formData.rollNo} onChange={handleChange} />
+                  </div>
+  
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1.5">College / University *</label>
+                    <input type="text" name="college"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-sm"
+                      placeholder="e.g. Shri Ramswaroop Memorial College..." value={formData.college} onChange={handleChange} required />
+                  </div>
+  
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1.5">Branch / Course Details *</label>
+                    <input type="text" name="courseName"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-sm"
+                      placeholder="e.g. Computer Science and Engineering" value={formData.courseName} onChange={handleChange} required />
+                  </div>
+  
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1.5">Team / Department Name *</label>
+                    <input type="text" name="duration"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-sm"
+                      placeholder="e.g. Artificial Intelligence & Machine Learning" value={formData.duration} onChange={handleChange} required />
+                  </div>
+  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-400 mb-1.5">Start Date *</label>
+                      <input type="date" name="startDate"
+                        className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 [color-scheme:dark] text-sm"
+                        value={formData.startDate} onChange={handleChange} required />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-400 mb-1.5">End Date *</label>
+                      <input type="date" name="endDate"
+                        className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 [color-scheme:dark] text-sm"
+                        value={formData.endDate} onChange={handleChange} required />
+                    </div>
+                  </div>
+  
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1.5">Issue Date *</label>
+                    <input type="date" name="issueDate"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 [color-scheme:dark] text-sm"
+                      value={formData.issueDate} onChange={handleChange} required />
+                  </div>
                 </div>
                 
-                <div>
-                  <label className="block text-sm font-semibold text-slate-400 mb-2">Student Name *</label>
-                  <input type="text" name="studentName"
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                    placeholder="e.g. Prakhar Tiwari" value={formData.studentName} onChange={handleChange} required />
-                </div>
+                <button 
+                  type="submit" 
+                  disabled={isGenerating}
+                  className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-3.5 px-4 rounded-lg transition-all transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg shadow-emerald-500/25 flex justify-center items-center mt-6 disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  {isGenerating ? "GENERATING & SAVING..." : "GENERATE CERTIFICATE"}
+                </button>
+              </form>
+            </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-slate-400 mb-2">Roll Number *</label>
-                  <input type="text" name="rollNo"
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                    placeholder="e.g. 2024041338" value={formData.rollNo} onChange={handleChange} required />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-slate-400 mb-2">College/University *</label>
-                  <input type="text" name="college"
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                    placeholder="e.g. Madan Mohan Malaviya University Of Technology" value={formData.college} onChange={handleChange} required />
-                </div>
-
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-semibold text-slate-400 mb-2">Course Details *</label>
-                  <input type="text" name="courseName"
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                    placeholder="e.g. Electronics and communication (IOT), Btech 2nd yr" value={formData.courseName} onChange={handleChange} required />
-                </div>
-
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-semibold text-slate-400 mb-2">Duration Text *</label>
-                  <input type="text" name="duration"
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                    placeholder="e.g. Six-week" value={formData.duration} onChange={handleChange} required />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-slate-400 mb-2">Start Date *</label>
-                  <input type="date" name="startDate"
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 [color-scheme:dark]"
-                    value={formData.startDate} onChange={handleChange} required />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-slate-400 mb-2">End Date *</label>
-                  <input type="date" name="endDate"
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 [color-scheme:dark]"
-                    value={formData.endDate} onChange={handleChange} required />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-slate-400 mb-2">Issue Date *</label>
-                  <input type="date" name="issueDate"
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 [color-scheme:dark]"
-                    value={formData.issueDate} onChange={handleChange} required />
+            {/* Live Preview Column */}
+            <div className="lg:w-1/2 flex flex-col bg-slate-950 rounded-xl border border-slate-800 p-6 shadow-xl">
+              <h2 className="text-lg font-bold text-white mb-4 flex items-center shrink-0">
+                <span className="bg-emerald-500/20 text-emerald-400 p-1.5 rounded-lg mr-2">2</span>
+                Live Preview
+              </h2>
+              
+              {/* Scaled Preview Container */}
+              <div className="flex-1 w-full bg-slate-900 rounded-lg border border-slate-700 flex items-center justify-center overflow-hidden">
+                <div 
+                  className="relative origin-center bg-white shadow-2xl"
+                  style={{
+                    width: '800px',
+                    height: '1131px',
+                    transform: 'scale(0.45)', // scale down to fit pane
+                  }}
+                >
+                  <CertificateTemplate data={formData} />
                 </div>
               </div>
-              
-              <button 
-                type="submit" 
-                disabled={isGenerating}
-                className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-4 px-4 rounded-lg transition-all transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg shadow-emerald-500/25 flex justify-center items-center mt-8 disabled:opacity-70 disabled:cursor-not-allowed"
-              >
-                {isGenerating ? "GENERATING & SAVING..." : "GENERATE CERTIFICATE"}
-              </button>
-            </form>
+              <p className="text-center text-xs text-slate-500 mt-4 shrink-0">
+                This is a live preview. The downloaded PDF will be in high resolution.
+              </p>
+            </div>
+            
           </div>
         </div>
       </div>
