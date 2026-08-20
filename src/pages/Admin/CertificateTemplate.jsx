@@ -91,12 +91,13 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
           <div style={{ marginLeft: '30px', flex: 1, display: 'flex', flexDirection: 'column' }}>
             <h1 style={{ 
               margin: 0, 
-              fontSize: '52px', 
-              letterSpacing: '14px', 
+              fontSize: '46px', 
+              letterSpacing: '10px', 
               color: '#222',
               fontFamily: '"Arial Black", Impact, Arial, sans-serif',
               fontWeight: '900',
-              lineHeight: '1'
+              lineHeight: '1',
+              whiteSpace: 'nowrap'
             }}>
               FLYTIUM DRONES
             </h1>
