@@ -192,7 +192,7 @@ const CertificateTemplate = React.forwardRef(({ data }, ref) => {
           zIndex: 1,
           opacity: 0.20
         }}>
-          <FDLogo width="650" height="650" color="#0ea5e9" />
+          <FDLogo width="900" height="900" />
         </div>
 
         {/* Footer */}
