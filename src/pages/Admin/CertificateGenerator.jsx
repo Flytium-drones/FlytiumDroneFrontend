@@ -61,10 +61,11 @@ const CertificateGenerator = () => {
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       
       const pdfBlob = pdf.output('blob');
+      const pdfFile = new File([pdfBlob], `${formData.certificateId}.pdf`, { type: 'application/pdf' });
       
       toast.loading("Uploading to cloud...", { id: "generate" });
       const cloudinaryFormData = new FormData();
-      cloudinaryFormData.append("file", pdfBlob, `${formData.certificateId}.pdf`);
+      cloudinaryFormData.append("file", pdfFile);
       cloudinaryFormData.append("upload_preset", "flytium");
       cloudinaryFormData.append("cloud_name", "dhkpwi9ga");
 
@@ -77,7 +78,8 @@ const CertificateGenerator = () => {
       const pdfUrl = uploadData.secure_url;
       
       if (!pdfUrl) {
-        throw new Error("Cloudinary upload failed");
+        console.error("Cloudinary error:", uploadData);
+        throw new Error(uploadData.error?.message || "Cloudinary upload failed");
       }
 
       toast.loading("Saving to database...", { id: "generate" });
