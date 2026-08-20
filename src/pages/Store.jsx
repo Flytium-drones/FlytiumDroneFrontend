@@ -509,7 +509,6 @@ const Store = () => {
                   <h2 className="text-3xl md:text-4xl font-black text-white mb-4">Ready to Build Your Own Drone?</h2>
                   <p className="text-blue-100 mb-8 font-medium">Start your drone learning journey today.</p>
                   <div className="flex justify-center gap-4">
-                    <button onClick={() => handleAddToCart(nanoDroneFallback)} className="px-8 py-3 bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-black rounded-full shadow-lg transition-all hover:scale-105">BUY NOW</button>
                     <button onClick={() => navigate('/contact')} className="px-8 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold rounded-full backdrop-blur-sm transition-all hover:scale-105 flex items-center gap-2"><Phone className="w-4 h-4" /> CONTACT US</button>
                   </div>
                 </div>
